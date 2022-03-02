@@ -1,3 +1,6 @@
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const { mnemonic, infura } = require('./.secret.json');
+
 /**
  * Copyright 2020 ChainSafe Systems
  * SPDX-License-Identifier: LGPL-3.0-only
@@ -87,6 +90,24 @@ module.exports = {
       // network_id: 2111,   // This network is yours, in the cloud.
       // production: true    // Treats this network as if it was a public net. (default: false)
     // }
+    mumbai: {
+      provider: () => new HDWalletProvider(mnemonic, `https://polygon-mumbai.infura.io/v3/${infura}`),
+      network_id: 80001,
+      skipDryRun: true,
+      production: false
+    },
+    matic: {
+      provider: () => new HDWalletProvider(mnemonic, `https://polygon-mainnet.infura.io/v3/${infura}`),
+      network_id: 137,
+      skipDryRun: false,
+      production: true
+    },
+    rinkeby: {
+      provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/${infura}`),
+      network_id: 4,
+      skipDryRun: true,
+      production: false
+    }
   },
 
   // Set default mocha options here, use special reporters etc.
@@ -107,5 +128,6 @@ module.exports = {
       //  evmVersion: "byzantium"
       }
     }
-  }
+  },
+  contracts_build_directory: 'frontend/cyberpop-bridge/src/contracts'
 }
