@@ -3,6 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 
 import BridgeArtifact from "./contracts/Bridge.json";
+import ERC20Artifact from "./contracts/ERC20.json";
+import ERC721Artifact from "./contracts/ERC721.json";
+import ERC1155Artifact from "./contracts/ERC1155.json";
 
 import { ethers } from "ethers"
 import { Link, Route } from "wouter"
@@ -10,11 +13,18 @@ import { NoWalletDetected } from "./components/NoWalletDetected"
 import { ConnectWallet } from "./components/ConnectWallet"
 import { WaitingForTransactionMessage } from "./components/WaitingForTransactionMessage"
 import { TransactionErrorMessage } from "./components/TransactionErrorMessage"
-import { Transfer } from "./components/Transfer"
+import { TransferCYT } from "./components/TransferCYT"
+import { TransferCyborg } from "./components/TransferCyborg"
+import { TransferBadge } from "./components/TransferBadge"
 import { RegisterResource } from "./components/RegisterResource"
+import { QueryResource } from "./components/QueryResource"
+import { Admin } from "./components/Admin"
 
-import mumbai from "./contract-address/mumbai.json"
-import rinkeby from "./contract-address/rinkeby.json"
+// import mumbai from "./contract-address/mumbai.json"
+// import rinkeby from "./contract-address/rinkeby.json"
+import development from "./contract-address/development-fork.json"
+import geth from "./contract-address/geth.json"
+// import assets from "./contract-address.json"
 
 function App() {
   const [selectedAddress, setAddress] = useState(null)
@@ -23,7 +33,11 @@ function App() {
   const [txBeingSent, setTx] = useState('')
   const [transactionError, setTxError] = useState(null)
   const [contractAddress, setContractAddress] = useState({})
+  const [assetsAddress, setAssetsAddress] = useState({})
   const [bridge, setBridge] = useState(null)
+  const [cyt, setCYT] = useState(null)
+  const [cyborg, setCyborg] = useState(null)
+  const [badge, setBadge] = useState(null)
   const [provider, setProvider] = useState(null)
 
   useEffect(() => {
@@ -39,6 +53,26 @@ function App() {
         _provider.getSigner(0)
       )
       setBridge(b)
+
+      b = new ethers.Contract(
+        assetsAddress.cyt,
+        ERC20Artifact.abi,
+        _provider.getSigner(0)
+      )
+      setCYT(b)
+
+      b = new ethers.Contract(
+        assetsAddress.cyborg,
+        ERC721Artifact.abi,
+        _provider.getSigner(0)
+      )
+      setCyborg(b)
+      b = new ethers.Contract(
+        assetsAddress.badge,
+        ERC1155Artifact.abi,
+        _provider.getSigner(0)
+      )
+      setBadge(b)
     }
     update()
   }, [network, selectedAddress])
@@ -55,8 +89,13 @@ function App() {
 
   const _checkNetwork = () => {
     let chainId = parseInt(window.ethereum.chainId)
-    let networkName = chainId == 4 ? "rinkeby" : "mumbai"
-    setContractAddress(chainId == 4 ? rinkeby : mumbai)
+    let networkName = chainId == 5 ? "development" : "geth"
+    // let networkName = chainId == 4 ? "rinkeby" : "mumbai"
+    // setContractAddress(chainId == 4 ? rinkeby : mumbai)
+    // setAssetsAddress(assets[networkName])
+    setContractAddress(chainId == 5 ? development : geth)
+    setAssetsAddress(chainId == 5 ? development : geth)
+
     setNetwork(networkName)
   }
 
@@ -81,8 +120,15 @@ function App() {
         <div className="col-12">
           <ul className="nav">
             <li className="nav-item">
-              <Link className="nav-link" to="/">Transfer</Link>
+              <Link className="nav-link" to="/">Transfer ERC20</Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/erc721">Transfer ERC721</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/erc1155">Transfer ERC1155</Link>
+            </li>
+
             <li className="nav-item">
               <Link className="nav-link" to="/register-resource">Register Resource</Link>
             </li>
@@ -90,7 +136,7 @@ function App() {
               <Link className="nav-link" to="/query-resource">Query Resource</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/query-proposal">Query Proposal</Link>
+              <Link className="nav-link" to="/add-relayer">Add Relayer</Link>
             </li>
           </ul>
           {txBeingSent && (
@@ -110,14 +156,22 @@ function App() {
       <div className="row">
         <div className="col-12">
           <Route path="/">
-            <Transfer />
+            <TransferCYT bridge={bridge} erc20={cyt} />
+          </Route>
+          <Route path="/erc721">
+            <TransferCyborg bridge={bridge} erc721={cyborg} />
+          </Route>
+          <Route path="/erc1155">
+            <TransferBadge bridge={bridge} erc1155={badge} />
           </Route>
           <Route path="/register-resource">
             <RegisterResource bridge={bridge} contractAddress={contractAddress} />
           </Route>
           <Route path="/query-resource">
+            <QueryResource bridge={bridge} contractAddress={contractAddress} />
           </Route>
-          <Route path="/query-proposal">
+          <Route path="/add-relayer">
+            <Admin bridge={bridge} contractAddress={contractAddress} />
           </Route>
         </div>
       </div>

@@ -54,13 +54,14 @@ module.exports = {
     geth: {
      host: "127.0.0.1",     // Localhost (default: none)
      port: 8545,            // Standard Ethereum port (default: none)
-     network_id: "5",       // Any network (default: none)
+     network_id: "1005",       // Any network (default: none)
     },
 
-    test: {
+    development: {
       host: "127.0.0.1",     // Localhost (default: none)
-      port: 8545,            // Standard Ethereum port (default: none)
-      network_id: "*",       // Any network (default: none)
+      port: 7545,            // Standard Ethereum port (default: none)
+      network_id: "1004",       // Any network (default: none)
+      skipDryRun: true,     // Skip dry run before migrations? (default: false for public nets )
       disableConfirmationListener: true,
      },
     // Another network with more advanced options...

@@ -1,7 +1,7 @@
 import React from "react";
 import { ethers } from "ethers"
 
-export function Transfer({ bridge, erc20 }) {
+export function TransferCYT({ bridge, erc20 }) {
   const resourceId = '0x000000000000000000000000000000c76ebe4a02bbc34786d860b355f5a5ce00'
   const deposit = async (chainId, to, amount) => {
     let handler = await bridge._resourceIDToHandlerAddress(resourceId)
@@ -14,7 +14,7 @@ export function Transfer({ bridge, erc20 }) {
   }
   return (
     <div>
-      <h4>Transfer</h4>
+      <h4>Transfer ERC20</h4>
       <form
         onSubmit={(event) => {
           // This function just calls the transferTokens callback with the

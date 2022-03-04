@@ -2,7 +2,7 @@ import React from "react"
 
 export function RegisterResource({ bridge, contractAddress }) {
     const registerResource = async (token, resourceId, handler) => {
-        await bridge.adminSetResource(token, resourceId, handler)
+        await bridge.adminSetResource(handler, resourceId, token)
     }
     return (
         <div>
