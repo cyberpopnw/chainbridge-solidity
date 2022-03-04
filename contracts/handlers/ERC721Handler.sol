@@ -8,7 +8,6 @@ import "../ERC721Safe.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165Checker.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 
-
 /**
     @title Handles ERC721 deposits and deposit executions.
     @author ChainSafe Systems.
@@ -22,10 +21,7 @@ contract ERC721Handler is IDepositExecute, HandlerHelpers, ERC721Safe {
     /**
         @param bridgeAddress Contract address of previously deployed Bridge.
      */
-    constructor(
-        address bridgeAddress
-    ) public HandlerHelpers(bridgeAddress) {
-    }
+    constructor(address bridgeAddress) HandlerHelpers(bridgeAddress) {}
 
     /**
         @notice A deposit is initiatied by making a deposit in the Bridge contract.
@@ -40,16 +36,20 @@ contract ERC721Handler is IDepositExecute, HandlerHelpers, ERC721Safe {
         marked true in {_burnList}, deposited tokens will be burned, if not, they will be locked.
         @return metaData : the deposited token metadata acquired by calling a {tokenURI} method in the token contract.
      */
-    function deposit(bytes32    resourceID,
-                    address     depositer,
-                    bytes       calldata data
-                    ) external override onlyBridge returns (bytes memory metaData) {
-        uint         tokenID;
+    function deposit(
+        bytes32 resourceID,
+        address depositer,
+        bytes calldata data
+    ) external override onlyBridge returns (bytes memory metaData) {
+        uint256 tokenID;
 
-        (tokenID) = abi.decode(data, (uint));
+        (tokenID) = abi.decode(data, (uint256));
 
         address tokenAddress = _resourceIDToTokenContractAddress[resourceID];
-        require(_contractWhitelist[tokenAddress], "provided tokenAddress is not whitelisted");
+        require(
+            _contractWhitelist[tokenAddress],
+            "provided tokenAddress is not whitelisted"
+        );
 
         // Check if the contract supports metadata, fetch it if it does
         if (tokenAddress.supportsInterface(_INTERFACE_ERC721_METADATA)) {
@@ -76,19 +76,28 @@ contract ERC721Handler is IDepositExecute, HandlerHelpers, ERC721Safe {
         metadata                        length      uint256    bytes    (64 + len(destinationRecipientAddress)) - (64 + len(destinationRecipientAddress) + 32)
         metadata                                      bytes    bytes    (64 + len(destinationRecipientAddress) + 32) - END
      */
-    function executeProposal(bytes32 resourceID, bytes calldata data) external override onlyBridge {
-        uint         tokenID;
-        uint         lenDestinationRecipientAddress;
+    function executeProposal(bytes32 resourceID, bytes calldata data)
+        external
+        override
+        onlyBridge
+    {
+        uint256 tokenID;
+        uint256 lenDestinationRecipientAddress;
         bytes memory destinationRecipientAddress;
-        uint         offsetMetaData;
-        uint         lenMetaData;
+        uint256 offsetMetaData;
+        uint256 lenMetaData;
         bytes memory metaData;
 
-        (tokenID, lenDestinationRecipientAddress) = abi.decode(data, (uint, uint));
+        (tokenID, lenDestinationRecipientAddress) = abi.decode(
+            data,
+            (uint256, uint256)
+        );
         offsetMetaData = 64 + lenDestinationRecipientAddress;
         destinationRecipientAddress = bytes(data[64:offsetMetaData]);
-        lenMetaData = abi.decode(data[offsetMetaData:], (uint));
-        metaData = bytes(data[offsetMetaData + 32:offsetMetaData + 32 + lenMetaData]);
+        lenMetaData = abi.decode(data[offsetMetaData:], (uint256));
+        metaData = bytes(
+            data[offsetMetaData + 32:offsetMetaData + 32 + lenMetaData]
+        );
 
         bytes20 recipientAddress;
 
@@ -97,12 +106,25 @@ contract ERC721Handler is IDepositExecute, HandlerHelpers, ERC721Safe {
         }
 
         address tokenAddress = _resourceIDToTokenContractAddress[resourceID];
-        require(_contractWhitelist[address(tokenAddress)], "provided tokenAddress is not whitelisted");
+        require(
+            _contractWhitelist[address(tokenAddress)],
+            "provided tokenAddress is not whitelisted"
+        );
 
         if (_burnList[tokenAddress]) {
-            mintERC721(tokenAddress, address(recipientAddress), tokenID, metaData);
+            mintERC721(
+                tokenAddress,
+                address(recipientAddress),
+                tokenID,
+                metaData
+            );
         } else {
-            releaseERC721(tokenAddress, address(this), address(recipientAddress), tokenID);
+            releaseERC721(
+                tokenAddress,
+                address(this),
+                address(recipientAddress),
+                tokenID
+            );
         }
     }
 
@@ -117,9 +139,12 @@ contract ERC721Handler is IDepositExecute, HandlerHelpers, ERC721Safe {
     function withdraw(bytes memory data) external override onlyBridge {
         address tokenAddress;
         address recipient;
-        uint tokenID;
+        uint256 tokenID;
 
-        (tokenAddress, recipient, tokenID) = abi.decode(data, (address, address, uint));
+        (tokenAddress, recipient, tokenID) = abi.decode(
+            data,
+            (address, address, uint256)
+        );
 
         releaseERC721(tokenAddress, address(this), recipient, tokenID);
     }

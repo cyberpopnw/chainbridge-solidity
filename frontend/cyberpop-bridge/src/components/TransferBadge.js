@@ -5,7 +5,7 @@ export function TransferBadge({ bridge, erc1155 }) {
     const resourceId = '0x000000000000000000000000000000c76ebe4a02bbc34786d860b355f5a5ce02'
     const deposit = async (chainId, to, tokenId, amount) => {
         let handler = await bridge._resourceIDToHandlerAddress(resourceId)
-        await erc1155.approve(handler, tokenId, amount)
+        await erc1155.setApprovalForAll(handler, true)
         const data = '0x' +
             ethers.utils.hexZeroPad(ethers.BigNumber.from(tokenId).toHexString(), 32).substr(2) +
             ethers.utils.hexZeroPad(ethers.BigNumber.from(amount).toHexString(), 32).substr(2) +
@@ -40,7 +40,7 @@ export function TransferBadge({ bridge, erc1155 }) {
                         type="number"
                         step="1"
                         min="0"
-                        name="tokenId"
+                        name="token_id"
                         placeholder="0"
                         required
                     />

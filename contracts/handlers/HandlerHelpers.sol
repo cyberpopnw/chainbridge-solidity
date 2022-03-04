@@ -12,28 +12,26 @@ contract HandlerHelpers is IERCHandler {
     address public immutable _bridgeAddress;
 
     // resourceID => token contract address
-    mapping (bytes32 => address) public _resourceIDToTokenContractAddress;
+    mapping(bytes32 => address) public _resourceIDToTokenContractAddress;
 
     // token contract address => resourceID
-    mapping (address => bytes32) public _tokenContractAddressToResourceID;
+    mapping(address => bytes32) public _tokenContractAddressToResourceID;
 
     // token contract address => is whitelisted
-    mapping (address => bool) public _contractWhitelist;
+    mapping(address => bool) public _contractWhitelist;
 
     // token contract address => is burnable
-    mapping (address => bool) public _burnList;
+    mapping(address => bool) public _burnList;
 
     modifier onlyBridge() {
         _onlyBridge();
         _;
     }
-    
+
     /**
         @param bridgeAddress Contract address of previously deployed Bridge.
      */
-    constructor(
-        address          bridgeAddress
-    ) public {
+    constructor(address bridgeAddress) {
         _bridgeAddress = bridgeAddress;
     }
 
@@ -50,8 +48,11 @@ contract HandlerHelpers is IERCHandler {
         @param resourceID ResourceID to be used when making deposits.
         @param contractAddress Address of contract to be called when a deposit is made and a deposited is executed.
      */
-    function setResource(bytes32 resourceID, address contractAddress) external override onlyBridge {
-
+    function setResource(bytes32 resourceID, address contractAddress)
+        external
+        override
+        onlyBridge
+    {
         _setResource(resourceID, contractAddress);
     }
 
@@ -60,13 +61,15 @@ contract HandlerHelpers is IERCHandler {
         to true.
         @param contractAddress Address of contract to be used when making or executing deposits.
      */
-    function setBurnable(address contractAddress) external override onlyBridge{
+    function setBurnable(address contractAddress) external override onlyBridge {
         _setBurnable(contractAddress);
     }
 
     function withdraw(bytes memory data) external virtual override {}
 
-    function _setResource(bytes32 resourceID, address contractAddress) internal {
+    function _setResource(bytes32 resourceID, address contractAddress)
+        internal
+    {
         _resourceIDToTokenContractAddress[resourceID] = contractAddress;
         _tokenContractAddressToResourceID[contractAddress] = resourceID;
 
@@ -74,7 +77,10 @@ contract HandlerHelpers is IERCHandler {
     }
 
     function _setBurnable(address contractAddress) internal {
-        require(_contractWhitelist[contractAddress], "provided contract is not whitelisted");
+        require(
+            _contractWhitelist[contractAddress],
+            "provided contract is not whitelisted"
+        );
         _burnList[contractAddress] = true;
     }
 }
