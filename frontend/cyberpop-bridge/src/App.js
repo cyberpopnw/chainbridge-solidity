@@ -19,9 +19,10 @@ import { TransferBadge } from "./components/TransferBadge"
 import { RegisterResource } from "./components/RegisterResource"
 import { QueryResource } from "./components/QueryResource"
 import { Admin } from "./components/Admin"
+import { Collections } from "./components/Collections"
 
-// import mumbai from "./contract-address/mumbai.json"
-// import rinkeby from "./contract-address/rinkeby.json"
+import mumbai from "./contract-address/mumbai.json"
+import rinkeby from "./contract-address/rinkeby.json"
 import development from "./contract-address/development-fork.json"
 import geth from "./contract-address/geth.json"
 // import assets from "./contract-address.json"
@@ -89,12 +90,12 @@ function App() {
 
   const _checkNetwork = () => {
     let chainId = parseInt(window.ethereum.chainId)
-    let networkName = chainId == 5 ? "development" : "geth"
-    // let networkName = chainId == 4 ? "rinkeby" : "mumbai"
-    // setContractAddress(chainId == 4 ? rinkeby : mumbai)
-    // setAssetsAddress(assets[networkName])
-    setContractAddress(chainId == 5 ? development : geth)
-    setAssetsAddress(chainId == 5 ? development : geth)
+    let networkName = chainId == 4 ? "rinkeby" : "mumbai"
+    setContractAddress(chainId == 4 ? rinkeby : mumbai)
+    setAssetsAddress(chainId == 4 ? rinkeby : mumbai)
+    // let networkName = chainId == 5 ? "development" : "geth"
+    // setContractAddress(chainId == 5 ? development : geth)
+    // setAssetsAddress(chainId == 5 ? development : geth)
 
     setNetwork(networkName)
   }
@@ -120,7 +121,10 @@ function App() {
         <div className="col-12">
           <ul className="nav">
             <li className="nav-item">
-              <Link className="nav-link" to="/">Transfer ERC20</Link>
+              <Link className="nav-link" to="/">Assets</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/erc20">Transfer ERC20</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/erc721">Transfer ERC721</Link>
@@ -128,15 +132,21 @@ function App() {
             <li className="nav-item">
               <Link className="nav-link" to="/erc1155">Transfer ERC1155</Link>
             </li>
-
-            <li className="nav-item">
-              <Link className="nav-link" to="/register-resource">Register Resource</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/query-resource">Query Resource</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/add-relayer">Add Relayer</Link>
+            <li className="nav-item dropdown">
+              <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Admin
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                  <Link className="dropdown-item" to="/register-resource">Register Resource</Link>
+                </li>
+                <li>
+                  <Link className="dropdown-item" to="/query-resource">Query Resource</Link>
+                </li>
+                <li>
+                  <Link className="dropdown-item" to="/add-relayer">Add Relayer</Link>
+                </li>
+              </ul>
             </li>
           </ul>
           {txBeingSent && (
@@ -155,7 +165,7 @@ function App() {
 
       <div className="row">
         <div className="col-12">
-          <Route path="/">
+          <Route path="/erc20">
             <TransferCYT bridge={bridge} erc20={cyt} />
           </Route>
           <Route path="/erc721">
@@ -163,6 +173,12 @@ function App() {
           </Route>
           <Route path="/erc1155">
             <TransferBadge bridge={bridge} erc1155={badge} />
+          </Route>
+          <Route path="/">
+            <Collections erc20={cyt}
+              erc721={cyborg} erc1155={badge}
+              contractAddress={contractAddress} address={selectedAddress}
+              network={network} />
           </Route>
           <Route path="/register-resource">
             <RegisterResource bridge={bridge} contractAddress={contractAddress} />
