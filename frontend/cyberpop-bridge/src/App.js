@@ -20,6 +20,7 @@ import { RegisterResource } from "./components/RegisterResource"
 import { QueryResource } from "./components/QueryResource"
 import { Admin } from "./components/Admin"
 import { Collections } from "./components/Collections"
+import { Status } from "./components/Status"
 
 import mumbai from "./contract-address/mumbai.json"
 import rinkeby from "./contract-address/rinkeby.json"
@@ -90,12 +91,12 @@ function App() {
 
   const _checkNetwork = () => {
     let chainId = parseInt(window.ethereum.chainId)
-    let networkName = chainId == 4 ? "rinkeby" : "mumbai"
-    setContractAddress(chainId == 4 ? rinkeby : mumbai)
-    setAssetsAddress(chainId == 4 ? rinkeby : mumbai)
-    // let networkName = chainId == 5 ? "development" : "geth"
-    // setContractAddress(chainId == 5 ? development : geth)
-    // setAssetsAddress(chainId == 5 ? development : geth)
+    //let networkName = chainId == 4 ? "rinkeby" : "mumbai"
+    //setContractAddress(chainId == 4 ? rinkeby : mumbai)
+    //setAssetsAddress(chainId == 4 ? rinkeby : mumbai)
+    let networkName = chainId == 5 ? "development" : "geth"
+    setContractAddress(chainId == 5 ? development : geth)
+    setAssetsAddress(chainId == 5 ? development : geth)
 
     setNetwork(networkName)
   }
@@ -131,6 +132,9 @@ function App() {
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/erc1155">Transfer ERC1155</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/status">Status</Link>
             </li>
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -188,6 +192,9 @@ function App() {
           </Route>
           <Route path="/add-relayer">
             <Admin bridge={bridge} contractAddress={contractAddress} />
+          </Route>
+          <Route path="/status">
+            <Status api="http://localhost:8090" />
           </Route>
         </div>
       </div>
