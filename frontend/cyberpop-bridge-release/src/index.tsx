@@ -7,10 +7,11 @@ import { Main } from '@/layout/main'
 import Home from '@/page/home'
 import Bridge from '@/page/bridge'
 import Loan from '@/page/loan'
+import ConnectWallet from '@/page/connectWallet'
+import NoWalletDetected from '@/page/noWalletDetected'
 
 // CSS
 import '@/index.css'
-import Backgroud from '@/layout/Backgroud'
 
 ReactDOM.render(
   <BrowserRouter>
@@ -20,6 +21,8 @@ ReactDOM.render(
           <Route path="/" element={<Home/>}/>
           <Route path="/bridge" element={<Bridge/>} />
           <Route path="/loan" element={<Loan />} />
+          <Route path="/connect-wallet" element={<ConnectWallet />} />
+          <Route path="/no-wallet-detected" element={<NoWalletDetected />} />
         </Routes>
       </Main>
     </GlobalStateProvider>

@@ -7,7 +7,7 @@ import rinkeby from "@/contract-address/rinkeby.json"
 
 import type { FC } from 'react'
 import type { GlobalState } from './globalState'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 export const GlobalStateContext = createContext<Partial<GlobalState> | undefined>(undefined);
 GlobalStateContext.displayName = 'GlobalStateContext';
@@ -18,7 +18,7 @@ const getChainID = () => {
 
 }
 
-const GlobalStateProvider:FC = ({ children }) => {
+const GlobalStateProvider: FC = ({ children }) => {
   const [provider, setProvider] = useState<GlobalState['provider']>()
 
   const [selectedAddress, setAddress] = useState<GlobalState['selectedAddress']>()
@@ -35,36 +35,38 @@ const GlobalStateProvider:FC = ({ children }) => {
   const [badge, setBadge] = useState<GlobalState['badge']>()
 
   const navigate = useNavigate()
+  const location = useLocation()
+
   const update = useCallback(() => {
-    if (!network || !provider) return
+      if (!network || !provider) return
 
-    // setBridge(() => new ethers.Contract(
-    //   contractAddress.bridge,
-    //   BridgeArtifact.abi,
-    //   provider.getSigner(0)
-    // ))
+      // setBridge(() => new ethers.Contract(
+      //   contractAddress.bridge,
+      //   BridgeArtifact.abi,
+      //   provider.getSigner(0)
+      // ))
 
-    // setCYT(() => new ethers.Contract(
-    //   assetsAddress.cyt,
-    //   ERC20Artifact.abi,
-    //   provider.getSigner(0)
-    // ))
+      // setCYT(() => new ethers.Contract(
+      //   assetsAddress.cyt,
+      //   ERC20Artifact.abi,
+      //   provider.getSigner(0)
+      // ))
 
-    // setCyborg(() => new ethers.Contract(
-    //   assetsAddress.cyborg,
-    //   ERC721Artifact.abi,
-    //   provider.getSigner(0)
-    // ))
+      // setCyborg(() => new ethers.Contract(
+      //   assetsAddress.cyborg,
+      //   ERC721Artifact.abi,
+      //   provider.getSigner(0)
+      // ))
 
-    // setBadge(() => new ethers.Contract(
-    //   assetsAddress.badge,
-    //   ERC1155Artifact.abi,
-    //   provider.getSigner(0)
-    // ))
+      // setBadge(() => new ethers.Contract(
+      //   assetsAddress.badge,
+      //   ERC1155Artifact.abi,
+      //   provider.getSigner(0)
+      // ))
 
-  }, [network, provider])
+    }, [network, provider])
 
-  const connectWallet = async () => await window.ethereum.request<string[]>({ method: 'eth_requestAccounts' }).then(res => {
+  const connectWallet = useCallback(async () => await window.ethereum.request<string[]>({ method: 'eth_requestAccounts' }).then(res => {
     if (res) {
       const [_selectedAddress] = res
       setAddress(_selectedAddress)
@@ -75,25 +77,25 @@ const GlobalStateProvider:FC = ({ children }) => {
       setContractAddress(chainID === 4 ? rinkeby : mumbai)
       setAssetsAddress(chainID === 4 ? rinkeby : mumbai)
       setNetwork(networkName)
-    }
-  })
 
-  // useEffect(() => {
-  //   if (window.ethereum === undefined) {
-  //     navigate('/no-wallet-detected')
-  //     return
-  //   }
-  //
-  //   if (!selectedAddress) {
-  //     navigate('/connect-Wallet')
-  //     return
-  //   }
-  //
-  //   if (window.ethereum) {
-  //     setProvider(() => new ethers.providers.Web3Provider(window.ethereum as any))
-  //     connectWallet().then(update)
-  //   }
-  // }, [navigate, network, selectedAddress, update])
+      navigate('/')
+    }
+  }), [navigate])
+
+  useEffect(() => {
+    if (window.ethereum === undefined) {
+      navigate('/no-wallet-detected')
+      return
+    }
+
+    if (!selectedAddress && location.pathname !== '/connect-Wallet') {
+      navigate('/connect-Wallet')
+    }
+
+    if (window.ethereum && !provider) {
+      setProvider(() => new ethers.providers.Web3Provider(window.ethereum as any))
+    }
+  }, [connectWallet, location.pathname, navigate, network, provider, selectedAddress, update])
 
   const providerValue: Partial<GlobalState> = {
     provider,
@@ -109,7 +111,7 @@ const GlobalStateProvider:FC = ({ children }) => {
 
   return (
     <GlobalStateContext.Provider value={providerValue}>
-      { children }
+      {children}
     </GlobalStateContext.Provider>
   )
 }
