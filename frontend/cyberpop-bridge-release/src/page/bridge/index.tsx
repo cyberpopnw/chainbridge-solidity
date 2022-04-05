@@ -6,13 +6,22 @@ import ChooseAddressForm from '@/page/bridge/component/stepForm/chooseAddressFor
 import { ConfirmButton } from '@/page/bridge/layout/confirmButton'
 import { SelectNFT } from '@/page/bridge/component/stepForm/selectNFT'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import type { FC } from 'react'
 import type { FormProps } from '@arco-design/web-react'
-import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 
-
+type FormValue = {
+  NFTItem: {
+    selected: boolean | undefined,
+    name: string;
+    action: 'transfer' | 'sell'
+  }[],
+  sourceAddress: string;
+  sourceChain: string;
+  targetAddress: string;
+  targetChain: string;
+}
 
 const { Step } = StepContainer
 
@@ -49,8 +58,6 @@ const Bridge = () => {
   const { useForm } = Form
   const [ formInstance ] = useForm()
 
-  const { selectedAddress } = useGlobalStateContext()
-
   const [currentStep, setCurrentStep] = useState(1)
   const [completedSteps, setCompletedSteps] = useState([1])
 
@@ -62,22 +69,22 @@ const Bridge = () => {
   const formProps: FormProps = {
     form: formInstance,
     layout: 'vertical',
-  }
-
-  useEffect(() => {
-    if (selectedAddress) {
-      formInstance.setFieldValue('sourceAddress', selectedAddress)
+    labelCol: { span: 4 },
+    autoComplete: 'off',
+    onSubmit (value: FormValue) {
+      console.log({...value, NFTItem: value.NFTItem.filter(item => item.selected)})
     }
-  }, [formInstance, selectedAddress])
+  }
 
   return (
     <FlexContainer style={{ alignItems: 'center', flexDirection: "column", width: "100%" }}>
       <PrimaryTitle>Cross Chain NFT Bridge</PrimaryTitle>
       <Form {...formProps}>
         <StepContainer current={currentStep} direction="vertical" lineless>
-          <Step title={stepTitle[1].title} description={
-            <StepContent
-              content={<ChooseAddressForm switchStep={switchStep(2)}/>}/>}/>
+          <Step
+            title={stepTitle[1].title}
+            description={<StepContent content={<ChooseAddressForm switchStep={switchStep(2)}/>}/>}
+          />
           <Step
             title={stepTitle[2].title}
             description={
@@ -93,7 +100,7 @@ const Bridge = () => {
               <StepContent
                 disabled={currentStep !== 3 && !completedSteps.includes(3)}
                 disabledText={stepTitle[3].disabledText}
-                content={<FlexCenter><ConfirmButton size="large" type="primary">Confirm</ConfirmButton></FlexCenter>}
+                content={<FlexCenter><ConfirmButton size="large" type="primary" htmlType="submit">Confirm</ConfirmButton></FlexCenter>}
               />
             }
           />

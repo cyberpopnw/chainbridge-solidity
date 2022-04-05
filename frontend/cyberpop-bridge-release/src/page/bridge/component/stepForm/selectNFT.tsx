@@ -1,5 +1,5 @@
 import { NFTCard } from '@/page/bridge/component/NFTCard'
-import { Button, Checkbox } from '@arco-design/web-react'
+import { Button, Form } from '@arco-design/web-react'
 import styled from 'styled-components'
 import { FC } from 'react'
 
@@ -21,31 +21,29 @@ const NFTs = [
   }
 ]
 
-const CheckBoxGroup = styled(Checkbox.Group)`
+const NFTCardGroup = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 330px));
   grid-column-gap: 3rem;
   align-items: center;
   justify-content: center;
-  
-  .arco-checkbox {
-    margin-right: 0;
-  }
 `
 
 export const SelectNFT: FC<{
   switchStep: () => void
 }> = ({ switchStep }) => {
   return (
-    <>
-      <CheckBoxGroup>
+    <Form.Item field="selectedNFT">
+      <NFTCardGroup>
         {
-          NFTs.map(nft => <NFTCard NFTItem={nft} />)
+          NFTs.map((NFT, index) => (
+            <NFTCard NFTItem={NFT} key={NFT.name} index={index}/>
+          ))
         }
-      </CheckBoxGroup>
+      </NFTCardGroup>
       <div className="next-step-button-wrapper">
         <Button type="primary" size="large" onClick={switchStep}>Next</Button>
       </div>
-    </>
+    </Form.Item>
   )
 }

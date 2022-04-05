@@ -12,6 +12,11 @@ export const FormContainer = styled.div`
     color: #FFFFFF;
     text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
   }
+  
+  .arco-form-message {
+    font-size: 2rem;
+    line-height: 4rem;
+  }
 
   .arco-form-item-wrapper {
     .arco-select-view, .arco-input {
@@ -20,6 +25,7 @@ export const FormContainer = styled.div`
       background-color: transparent;
       border: 2px solid rgba(255, 255, 255, .2);
       transition: all .3s;
+      font-size: 2rem;
       
       :hover {
         border: 2px solid #ffffff;
@@ -38,7 +44,7 @@ export const FormContainer = styled.div`
 
       &-value {
         line-height: 6rem;
-        font-size: 1.5rem;
+        font-size: 2rem;
         color: #ffffff;
       }
     }
@@ -49,10 +55,14 @@ export const FormContainer = styled.div`
       background-color: transparent;
       color: #ffffff;
       border: 2px solid rgba(255, 255, 255, .2);
-      font-size: 1.5rem;
+      font-size: 2rem;
 
       ::placeholder {
         color: rgba(255, 255, 255, .2);
+      }
+      
+      :hover, :focus:hover {
+        background-color: transparent;
       }
     }
 

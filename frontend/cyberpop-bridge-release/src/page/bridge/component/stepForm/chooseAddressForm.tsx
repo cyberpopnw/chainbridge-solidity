@@ -36,25 +36,25 @@ const ChooseAddressForm: FC<{
   return (
     <>
       <FormContainer>
-        <Form.Item label="From" field="sourceChain">
+        <Form.Item label="From" field="sourceChain" rules={[{ required: true, message: 'Source chain is required' }]}>
           <SourceChainSelect placeholder="Select Source Chain"/>
         </Form.Item>
-        <Form.Item label="To" field="targetChain">
+        <Form.Item label="To" field="targetChain" rules={[{ required: true, message: 'Target chain is required' }]}>
           <SourceChainSelect placeholder="Select Target Chain"/>
         </Form.Item>
-        <Form.Item label="Source Address" field="sourceAddress">
+        <Form.Item label="Source Address" field="sourceAddress" initialValue={selectedAddress} extra="Source address use  Metamask wallet automatically fill">
           {
             selectedAddress
-              ? <Input disabled />
+              ? <Input readOnly />
               : <Button type="primary" className="form-full-button">Connect Wallet</Button>
           }
         </Form.Item>
-        <Form.Item label="Target Address" field="targetAddress">
+        <Form.Item label="Target Address" field="targetAddress" rules={[{ required: true, message: 'Target address is required' }]}>
           <Input placeholder="Fill recipient address"/>
         </Form.Item>
       </FormContainer>
       <div className="next-step-button-wrapper">
-          <Button type="primary" size="large" onClick={switchStep}>Next</Button>
+        <Button type="primary" size="large" onClick={switchStep}>Next</Button>
       </div>
     </>
   )
