@@ -96,6 +96,7 @@
     "@metamask/providers": "^8.1.1",
     "@types/styled-components": "^5.1.24",
     "babel-plugin-import": "^1.13.3",
+    "craco-less": "^2.0.0",
     "less": "^4.1.2",
     "less-loader": "5.0.0"
   },

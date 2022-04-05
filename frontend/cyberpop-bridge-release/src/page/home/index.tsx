@@ -1,7 +1,7 @@
 import Nav from '@/page/home/layout/nav'
 import Content from '@/page/home/layout/content'
-import { PrimaryTitle, SecondaryTitle } from '@/page/home/layout/Title'
-import { FlexBetween, FlexContainer } from '@/layout/flex'
+import { PrimaryTitle, SecondaryTitle } from '@/component/Title'
+import { FlexBetween } from '@/layout/flex'
 import { Statistic, StatisticGroup } from '@/page/home/component/statistic'
 
 import type { FC } from 'react'
@@ -9,7 +9,7 @@ import type { FC } from 'react'
 
 const Home: FC = () => {
   return (
-    <FlexContainer style={{ flexDirection: "column", width: '100%', height: '100%' }}>
+    <>
       <Nav />
       <Content>
         {/*Title*/}
@@ -30,7 +30,7 @@ const Home: FC = () => {
         <FlexBetween>
         </FlexBetween>
       </Content>
-    </FlexContainer>
+    </>
   )
 }
 

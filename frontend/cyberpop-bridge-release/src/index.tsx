@@ -5,6 +5,7 @@ import { Main } from '@/layout/main'
 
 // Route Component
 import Home from '@/page/home'
+import Bridge from '@/page/bridge'
 
 // CSS
 import '@/index.css'
@@ -16,6 +17,7 @@ ReactDOM.render(
       <Main>
         <Routes>
           <Route path="/" element={<Home/>}/>
+          <Route path="/bridge" element={<Bridge/>} />
         </Routes>
       </Main>
     </GlobalStateProvider>
