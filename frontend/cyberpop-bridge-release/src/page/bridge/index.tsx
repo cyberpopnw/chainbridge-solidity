@@ -3,12 +3,15 @@ import { PrimaryTitle } from '@/component/Title'
 import { StepContainer, StepWrapper } from '@/page/bridge/layout/stepContainer'
 import { FlexCenter, FlexContainer } from '@/layout/flex'
 import ChooseAddressForm from '@/page/bridge/component/stepForm/chooseAddressForm'
-
-import { useState } from 'react'
-
-import type { FC } from 'react'
 import { ConfirmButton } from '@/page/bridge/layout/confirmButton'
 import { SelectNFT } from '@/page/bridge/component/stepForm/selectNFT'
+
+import { useEffect, useState } from 'react'
+
+import type { FC } from 'react'
+import type { FormProps } from '@arco-design/web-react'
+import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
+
 
 
 const { Step } = StepContainer
@@ -43,6 +46,11 @@ const StepContent: FC<{
 }
 
 const Bridge = () => {
+  const { useForm } = Form
+  const [ formInstance ] = useForm()
+
+  const { selectedAddress } = useGlobalStateContext()
+
   const [currentStep, setCurrentStep] = useState(1)
   const [completedSteps, setCompletedSteps] = useState([1])
 
@@ -51,10 +59,21 @@ const Bridge = () => {
     setCompletedSteps(old => [...old, nextStepIndex - 1])
   }
 
+  const formProps: FormProps = {
+    form: formInstance,
+    layout: 'vertical',
+  }
+
+  useEffect(() => {
+    if (selectedAddress) {
+      formInstance.setFieldValue('sourceAddress', selectedAddress)
+    }
+  }, [formInstance, selectedAddress])
+
   return (
     <FlexContainer style={{ alignItems: 'center', flexDirection: "column", width: "100%" }}>
       <PrimaryTitle>Cross Chain NFT Bridge</PrimaryTitle>
-      <Form layout="vertical">
+      <Form {...formProps}>
         <StepContainer current={currentStep} direction="vertical" lineless>
           <Step title={stepTitle[1].title} description={
             <StepContent
@@ -73,7 +92,7 @@ const Bridge = () => {
             description={
               <StepContent
                 disabled={currentStep !== 3 && !completedSteps.includes(3)}
-                disabledText={stepTitle[2].disabledText}
+                disabledText={stepTitle[3].disabledText}
                 content={<FlexCenter><ConfirmButton size="large" type="primary">Confirm</ConfirmButton></FlexCenter>}
               />
             }

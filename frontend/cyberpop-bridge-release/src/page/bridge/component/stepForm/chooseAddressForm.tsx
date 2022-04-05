@@ -45,7 +45,7 @@ const ChooseAddressForm: FC<{
         <Form.Item label="Source Address" field="sourceAddress">
           {
             selectedAddress
-              ? <Input disabled/>
+              ? <Input disabled />
               : <Button type="primary" className="form-full-button">Connect Wallet</Button>
           }
         </Form.Item>
