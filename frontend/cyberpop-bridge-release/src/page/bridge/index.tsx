@@ -6,7 +6,6 @@ import ChooseAddressForm from '@/page/bridge/component/stepForm/chooseAddressFor
 
 import { useState } from 'react'
 
-
 import type { FC } from 'react'
 import { ConfirmButton } from '@/page/bridge/layout/confirmButton'
 import { SelectNFT } from '@/page/bridge/component/stepForm/selectNFT'

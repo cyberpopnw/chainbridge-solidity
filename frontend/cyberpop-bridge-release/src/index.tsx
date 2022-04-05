@@ -6,6 +6,7 @@ import { Main } from '@/layout/main'
 // Route Component
 import Home from '@/page/home'
 import Bridge from '@/page/bridge'
+import Loan from '@/page/loan'
 
 // CSS
 import '@/index.css'
@@ -18,6 +19,7 @@ ReactDOM.render(
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/bridge" element={<Bridge/>} />
+          <Route path="/loan" element={<Loan />} />
         </Routes>
       </Main>
     </GlobalStateProvider>
