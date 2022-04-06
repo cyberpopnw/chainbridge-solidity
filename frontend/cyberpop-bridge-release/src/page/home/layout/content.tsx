@@ -7,4 +7,8 @@ export default styled.div`
   align-items: center;
   text-align: center;
   margin-top: 15rem;
+  
+  * {
+    z-index: 1000;
+  }
 `

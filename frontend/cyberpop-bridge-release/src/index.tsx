@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import GlobalStateProvider from '@/globalStateContent'
-import { Main } from '@/layout/main'
 
 // Route Component
 import Home from '@/page/home'
@@ -12,6 +11,7 @@ import NoWalletDetected from '@/page/noWalletDetected'
 
 // CSS
 import '@/index.css'
+import { Main } from '@/layout/main'
 
 ReactDOM.render(
   <BrowserRouter>

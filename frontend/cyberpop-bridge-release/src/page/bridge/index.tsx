@@ -1,5 +1,5 @@
 import { Form } from '@arco-design/web-react'
-import { PrimaryTitle } from '@/component/Title'
+import { PrimaryTitle } from '@/layout/title'
 import { StepContainer, StepWrapper } from '@/page/bridge/layout/stepContainer'
 import { FlexCenter, FlexContainer } from '@/layout/flex'
 import ChooseAddressForm from '@/page/bridge/component/stepForm/chooseAddressForm'

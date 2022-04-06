@@ -1,8 +1,11 @@
-import styled from 'styled-components'
+import { Grid } from '@arco-design/web-react'
 import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+import Logo from '@/assets/images/logo.webp'
+
 
 import type { FC } from 'react'
-import { Grid } from '@arco-design/web-react'
+
 
 const NavLink = styled(Link)`
   transition: all .3s;
@@ -27,14 +30,7 @@ const Nav: FC = () => {
   return (
     <Grid.Row align="center" style={{ minWidth: '800px' }} >
       <Grid.Col span={2} offset={2}>
-        <div style={{
-          width: 100,
-          height: 100,
-          borderRadius: 2,
-          background: '#f7f7f7',
-          cursor: 'text'
-        }}
-        />
+        <img src={Logo} alt="NFT Bank Finance" />
       </Grid.Col>
       <Grid.Col span={16} offset={4}>
         <NavLink to="/nfts">NFTs</NavLink>

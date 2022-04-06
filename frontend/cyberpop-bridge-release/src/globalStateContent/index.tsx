@@ -15,7 +15,6 @@ GlobalStateContext.displayName = 'GlobalStateContext';
 const getChainID = () => {
   if (window.ethereum === undefined || window.ethereum.chainId === null) return
   return parseInt(window.ethereum.chainId)
-
 }
 
 const GlobalStateProvider: FC = ({ children }) => {
@@ -38,33 +37,33 @@ const GlobalStateProvider: FC = ({ children }) => {
   const location = useLocation()
 
   const update = useCallback(() => {
-      if (!network || !provider) return
+    if (!network || !provider) return
 
-      // setBridge(() => new ethers.Contract(
-      //   contractAddress.bridge,
-      //   BridgeArtifact.abi,
-      //   provider.getSigner(0)
-      // ))
+    // setBridge(() => new ethers.Contract(
+    //   contractAddress.bridge,
+    //   BridgeArtifact.abi,
+    //   provider.getSigner(0)
+    // ))
 
-      // setCYT(() => new ethers.Contract(
-      //   assetsAddress.cyt,
-      //   ERC20Artifact.abi,
-      //   provider.getSigner(0)
-      // ))
+    // setCYT(() => new ethers.Contract(
+    //   assetsAddress.cyt,
+    //   ERC20Artifact.abi,
+    //   provider.getSigner(0)
+    // ))
 
-      // setCyborg(() => new ethers.Contract(
-      //   assetsAddress.cyborg,
-      //   ERC721Artifact.abi,
-      //   provider.getSigner(0)
-      // ))
+    // setCyborg(() => new ethers.Contract(
+    //   assetsAddress.cyborg,
+    //   ERC721Artifact.abi,
+    //   provider.getSigner(0)
+    // ))
 
-      // setBadge(() => new ethers.Contract(
-      //   assetsAddress.badge,
-      //   ERC1155Artifact.abi,
-      //   provider.getSigner(0)
-      // ))
+    // setBadge(() => new ethers.Contract(
+    //   assetsAddress.badge,
+    //   ERC1155Artifact.abi,
+    //   provider.getSigner(0)
+    // ))
 
-    }, [network, provider])
+  }, [network, provider])
 
   const connectWallet = useCallback(async () => await window.ethereum.request<string[]>({ method: 'eth_requestAccounts' }).then(res => {
     if (res) {
@@ -77,10 +76,8 @@ const GlobalStateProvider: FC = ({ children }) => {
       setContractAddress(chainID === 4 ? rinkeby : mumbai)
       setAssetsAddress(chainID === 4 ? rinkeby : mumbai)
       setNetwork(networkName)
-
-      navigate('/')
     }
-  }), [navigate])
+  }), [])
 
   useEffect(() => {
     if (window.ethereum === undefined) {
@@ -88,13 +85,18 @@ const GlobalStateProvider: FC = ({ children }) => {
       return
     }
 
-    if (!selectedAddress && location.pathname !== '/connect-Wallet') {
-      navigate('/connect-Wallet')
-    }
-
-    if (window.ethereum && !provider) {
+    if (!provider) {
       setProvider(() => new ethers.providers.Web3Provider(window.ethereum as any))
     }
+
+    connectWallet()
+      .then(update)
+      .catch(err => {
+        console.log(err)
+        if (location.pathname !== '/connect-Wallet') {
+          navigate(`/connect-Wallet?redirect=${location.pathname}`)
+        }
+      })
   }, [connectWallet, location.pathname, navigate, network, provider, selectedAddress, update])
 
   const providerValue: Partial<GlobalState> = {

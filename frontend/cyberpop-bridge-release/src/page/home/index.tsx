@@ -1,26 +1,34 @@
-import Nav from '@/page/home/layout/nav'
+import Nav from '@/page/home/component/nav'
 import Content from '@/page/home/layout/content'
-import { PrimaryTitle, SecondaryTitle } from '@/component/Title'
+
 import { FlexBetween } from '@/layout/flex'
+import { BackgroundImg } from '@/page/home/layout/background'
+import { PrimaryTitle, SecondaryTitle } from '@/layout/title'
+import { TitleWrapper } from '@/page/home/layout/titleWrapper'
+
 import { Statistic, StatisticGroup } from '@/page/home/component/statistic'
 
-import type { FC } from 'react'
+import TransparentTitle from '@/assets/images/transparent-title.webp'
 
+
+import type { FC } from 'react'
 
 const Home: FC = () => {
   return (
     <>
+      <BackgroundImg />
       <Nav />
       <Content>
         {/*Title*/}
-        <div style={{ marginBottom: '15rem' }}>
-          <PrimaryTitle>
+        <TitleWrapper>
+          <img src={TransparentTitle} alt="NFT Bank: Secured Lending Platform" className="transparent-title" />
+          <PrimaryTitle className="primary-title">
             NTF Bank: Secured Lending Platform
           </PrimaryTitle>
-          <SecondaryTitle>
+          <SecondaryTitle className="secondary-title">
             Make your NFT assets flow efficiently
           </SecondaryTitle>
-        </div>
+        </TitleWrapper>
         {/* Data */}
         <StatisticGroup>
           <Statistic title="Current pool" value="$3213" />
