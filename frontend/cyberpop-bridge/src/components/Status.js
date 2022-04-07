@@ -14,6 +14,7 @@ export function Status({ api }) {
         <table className="table">
             <thead>
                 <tr>
+                    <th>Type</th>
                     <th>Sender</th>
                     <th>Recipient</th>
                     <th>Source Token Address</th>
@@ -27,12 +28,13 @@ export function Status({ api }) {
                 {deposits.map((deposit, index) => {
                     return (
                         <tr key={index}>
+                            <td>{deposit.Type}</td>
                             <td>{deposit.Sender}</td>
                             <td>{deposit.Recipient}</td>
                             <td>{deposit.SourceTokenAddress}</td>
                             <td>{deposit.DestinationTokenAddress}</td>
-                            <td>{deposit.TokenID}</td>
-                            <td>{deposit.Amount}</td>
+                            <td>{deposit.Type == "FungibleTransfer" ? "n/a" : deposit.TokenID}</td>
+                            <td>{deposit.Type == "NonFungibleTransfer" ? "n/a" : deposit.Amount}</td>
                             <td>{deposit.Status}</td>
                         </tr>
                     )
