@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import logo from './logo.svg';
 import './App.css';
 
-import BridgeArtifact from "./contracts/Bridge.json";
-import ERC20Artifact from "./contracts/ERC20.json";
-import ERC721Artifact from "./contracts/ERC721.json";
-import ERC1155Artifact from "./contracts/ERC1155.json";
+// import BridgeArtifact from "./contract-address/Bridge.json";
+// import ERC20Artifact from "./contracts/ERC20.json";
+// import ERC721Artifact from "./contracts/ERC721.json";
+// import ERC1155Artifact from "./contracts/ERC1155.json";
 
 import { ethers } from "ethers"
 import { Link, Route } from "wouter"

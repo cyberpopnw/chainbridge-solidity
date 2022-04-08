@@ -1,0 +1,10 @@
+{
+  "network": "development-fork",
+  "bridge": "0x39863e3eDB5255dB93bBf8E76c12578357dBe6c7",
+  "erc20handler": "0xE86AA40918017a65c496d0d2D4E3b99d3473f999",
+  "erc721handler": "0xB9045422E5a58B3C28cF5f7E5B3Ead224A35f25c",
+  "erc1155handler": "0x9B6Cd76c5Da453dF5edc828Ff518E24205268353",
+  "cyt": "0xb3d9bCf0ba41BF39C7266b6c8bCB9d854a907Ec3",
+  "cyborg": "0x99513a7cb0551317Fa6E1ea40B77Cd0B9D73D736",
+  "badge": "0x3aEeAD9bAb4c49f2542E552B94f99a1FF45abA87"
+}
