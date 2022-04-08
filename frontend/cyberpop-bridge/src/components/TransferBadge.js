@@ -1,17 +1,26 @@
 import React from "react";
 import { ethers } from "ethers"
 
-export function TransferBadge({ bridge, erc1155 }) {
+import { useLocation } from "wouter";
+import { useAppContext } from "../hooks/AppContext";
+
+export function TransferBadge({ erc1155 }) {
+    const [location, setLocation] = useLocation()
+    const { bridge, selectedAddress, waitForTx } = useAppContext()
     const resourceId = '0x000000000000000000000000000000c76ebe4a02bbc34786d860b355f5a5ce02'
     const deposit = async (chainId, to, tokenId, amount) => {
         let handler = await bridge._resourceIDToHandlerAddress(resourceId)
-        await erc1155.setApprovalForAll(handler, true)
+        let isApproved = await erc1155.isApprovedForAll(selectedAddress, handler)
+        if (!isApproved) {
+            waitForTx(await erc1155.setApprovalForAll(handler, true))
+        }
         const data = '0x' +
             ethers.utils.hexZeroPad(ethers.BigNumber.from(tokenId).toHexString(), 32).substr(2) +
             ethers.utils.hexZeroPad(ethers.BigNumber.from(amount).toHexString(), 32).substr(2) +
             ethers.utils.hexZeroPad(ethers.utils.hexlify((to.length - 2) / 2), 32).substr(2) +
             to.substr(2);
-        await bridge.deposit(chainId, resourceId, data)
+        waitForTx(await bridge.deposit(chainId, resourceId, data))
+        setLocation("/")
     }
     return (
         <div>

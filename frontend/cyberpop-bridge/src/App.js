@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import logo from './logo.svg';
 import './App.css';
 
-// import BridgeArtifact from "./contract-address/Bridge.json";
-// import ERC20Artifact from "./contracts/ERC20.json";
-// import ERC721Artifact from "./contracts/ERC721.json";
-// import ERC1155Artifact from "./contracts/ERC1155.json";
+import BridgeArtifact from "./contracts/Bridge.json";
+import ERC20Artifact from "./contracts/ERC20.json";
+import ERC721Artifact from "./contracts/ERC721.json";
+import ERC1155Artifact from "./contracts/ERC1155.json";
 
 import { ethers } from "ethers"
 import { Link, Route } from "wouter"
@@ -21,6 +21,7 @@ import { QueryResource } from "./components/QueryResource"
 import { Admin } from "./components/Admin"
 import { Collections } from "./components/Collections"
 import { Status } from "./components/Status"
+import { AppContext } from "./hooks/AppContext";
 
 import mumbai from "./contract-address/mumbai.json"
 import rinkeby from "./contract-address/rinkeby.json"
@@ -87,6 +88,12 @@ function App() {
 
   const _dismissNetworkError = async () => {
     setNetworkError(null)
+  }
+
+  const waitForTx = async (tx) => {
+    setTx(tx.hash)
+    await tx.wait()
+    setTx('')
   }
 
   const _checkNetwork = () => {
@@ -167,37 +174,39 @@ function App() {
       </div>
       <hr />
 
-      <div className="row">
-        <div className="col-12">
-          <Route path="/erc20">
-            <TransferCYT bridge={bridge} erc20={cyt} />
-          </Route>
-          <Route path="/erc721">
-            <TransferCyborg bridge={bridge} erc721={cyborg} />
-          </Route>
-          <Route path="/erc1155">
-            <TransferBadge bridge={bridge} erc1155={badge} />
-          </Route>
-          <Route path="/">
-            <Collections erc20={cyt}
-              erc721={cyborg} erc1155={badge}
-              contractAddress={contractAddress} address={selectedAddress}
-              network={network} />
-          </Route>
-          <Route path="/register-resource">
-            <RegisterResource bridge={bridge} contractAddress={contractAddress} />
-          </Route>
-          <Route path="/query-resource">
-            <QueryResource bridge={bridge} contractAddress={contractAddress} />
-          </Route>
-          <Route path="/add-relayer">
-            <Admin bridge={bridge} contractAddress={contractAddress} />
-          </Route>
-          <Route path="/status">
-            <Status api="http://localhost:8090" />
-          </Route>
+      <AppContext.Provider value={{ bridge, waitForTx, selectedAddress }}>
+        <div className="row">
+          <div className="col-12">
+            <Route path="/erc20">
+              <TransferCYT erc20={cyt} />
+            </Route>
+            <Route path="/erc721">
+              <TransferCyborg erc721={cyborg} />
+            </Route>
+            <Route path="/erc1155">
+              <TransferBadge erc1155={badge} />
+            </Route>
+            <Route path="/">
+              <Collections erc20={cyt}
+                erc721={cyborg} erc1155={badge}
+                contractAddress={contractAddress} address={selectedAddress}
+                network={network} />
+            </Route>
+            <Route path="/register-resource">
+              <RegisterResource bridge={bridge} contractAddress={contractAddress} />
+            </Route>
+            <Route path="/query-resource">
+              <QueryResource bridge={bridge} contractAddress={contractAddress} />
+            </Route>
+            <Route path="/add-relayer">
+              <Admin bridge={bridge} contractAddress={contractAddress} />
+            </Route>
+            <Route path="/status">
+              <Status api="http://localhost:8090" />
+            </Route>
+          </div>
         </div>
-      </div>
+      </AppContext.Provider>
     </div>
   );
 }
