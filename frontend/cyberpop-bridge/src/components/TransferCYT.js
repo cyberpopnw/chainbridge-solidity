@@ -1,16 +1,21 @@
 import React from "react";
 import { ethers } from "ethers"
+import { useAppContext } from "../hooks/AppContext";
+import { useLocation } from "wouter";
 
-export function TransferCYT({ bridge, erc20 }) {
+export function TransferCYT({ erc20 }) {
+  const { bridge, waitForTx } = useAppContext()
+  const [location, setLocation] = useLocation()
   const resourceId = '0x000000000000000000000000000000c76ebe4a02bbc34786d860b355f5a5ce00'
   const deposit = async (chainId, to, amount) => {
     let handler = await bridge._resourceIDToHandlerAddress(resourceId)
-    await erc20.increaseAllowance(handler, amount)
+    waitForTx(await erc20.increaseAllowance(handler, amount))
     const data = '0x' +
       ethers.utils.hexZeroPad(ethers.BigNumber.from(amount).toHexString(), 32).substr(2) +
       ethers.utils.hexZeroPad(ethers.utils.hexlify((to.length - 2) / 2), 32).substr(2) +
       to.substr(2);
-    await bridge.deposit(chainId, resourceId, data)
+    waitForTx(await bridge.deposit(chainId, resourceId, data))
+    setLocation("/")
   }
   return (
     <div>
