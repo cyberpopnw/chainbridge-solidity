@@ -1,24 +1,31 @@
+import { Button, Message } from '@arco-design/web-react'
+import { useRequest } from 'ahooks'
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
-import { ErrorPage, PrimaryTitle, ConnectWalletButton } from '@/layout/errorPage'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useAuthedRedirect } from '@/hooks/useAuthedRedirect'
+
+import '@/scss/exceptionPage.scss';
 
 const NoWalletDetected = () => {
-  const { connectWallet, selectedAddress } = useGlobalStateContext()
-  const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
+  const { connectWallet } = useGlobalStateContext()
+  const authedRedirect = useAuthedRedirect()
 
-  useEffect(() => {
-    if (selectedAddress) {
-      navigate(searchParams.get('redirect') || '/')
+  const { run, loading } = useRequest(() => {
+    return connectWallet ? connectWallet() : Promise.reject({
+      message: 'connect wallet function is not defined.'
+    })
+  }, {
+    manual: true,
+    onSuccess: authedRedirect,
+    onError (e) {
+      Message.error(e.message)
     }
-  }, [navigate, searchParams, selectedAddress])
+  })
 
   return (
-    <ErrorPage>
-      <PrimaryTitle>Please connect to your wallet.</PrimaryTitle>
-      <ConnectWalletButton onClick={() => connectWallet?.()}>Connect Wallet</ConnectWalletButton>
-    </ErrorPage>
+    <div className="exception-page">
+      <h3 className="exception-page__title">Please connect to your wallet.</h3>
+      <Button className="exception-page__button" loading={loading} onClick={run}>Connect Wallet</Button>
+    </div>
   )
 }
 

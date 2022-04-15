@@ -1,0 +1,31 @@
+@import 'src/scss/color';
+
+.exception-page {
+  text-align: center;
+
+  &__title {
+    font-size: 5rem;
+    color: $color-primary;
+  }
+
+  &__content {
+    color: $color-white;
+    font-size: 3rem;
+  }
+
+  &__button {
+    background-color: $color-primary-2 !important;
+    color: $color-white !important;
+    height: unset;
+    border: transparent;
+    font-size: 3rem;
+    padding: 2rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all .3s;
+
+    &:hover {
+      background-color: rgba($color-primary-2, .8) !important;
+    }
+  }
+}

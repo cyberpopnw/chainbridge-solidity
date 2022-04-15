@@ -8,7 +8,7 @@ export type GlobalState = {
   cyt: Contract;
   cyborg: Contract;
   contractAddress: ContractAddress,
-  network: 'rinkeby' | 'mumbai';
-  selectedAddress: string;
+  network?: providers.Network;
+  selectedAddress: string | null;
   connectWallet: () => Promise<void>
 }
