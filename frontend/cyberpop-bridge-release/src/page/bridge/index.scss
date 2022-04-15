@@ -1,0 +1,74 @@
+@import 'src/scss/color';
+@import 'src/page/bridge/chooseAddressForm';
+@import 'src/page/bridge/selectNFT';
+
+.step__wrapper {
+  .arco-steps-item:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  .arco-steps-item-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #FFFFFF;
+  }
+
+  .arco-steps-item-description {
+    max-width: none;
+    margin-top: 2rem;
+  }
+}
+
+.step__item {
+  background-color: #26172F;
+  border-radius: 5px;
+  padding: 5rem 5rem;
+  width: 115rem;
+  margin-bottom: 2rem;
+
+  .arco-spin {
+    display: block;
+  }
+
+  &--disabled {
+    .step__item__title, .step__item__text {
+      font-size: 2rem;
+      font-weight: 400;
+      color: #FFFFFF;
+    }
+  }
+
+  &__title {
+    opacity: 0.6;
+  }
+
+  &__text {
+    opacity: 0.8;
+
+  }
+
+  &__next-step {
+    &__wrapper {
+      text-align: right;
+      grid-column-start: 2;
+    }
+
+    &__button {
+      height: 4rem;
+      width: 10rem;
+      border-radius: 5px;
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.page-primary-title {
+  font-size: 5rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: $color-white;
+}
+
+.text-center {
+  text-align: center;
+}
