@@ -9,20 +9,18 @@ import { getTokenURIs } from '@/page/bridge/selectNFT/request'
 import type { FC } from 'react'
 import type { StepItemProps, NFTItem } from '@/page/bridge/selectNFT/type'
 
-const ERC721TokenIds = [1, 2]
-
-const ERC1155TokenIds = [1, 2]
-
 // TODO: nft list lazy load and virtual list
 // ERC1155 contract run balanceOfBatch([playerAddress], [0]) is work,balanceOfBatch([playerAddress], [0, 1]) not work.
 // ERC1155 contract run uri(0) return 'https://api.cyberpop.online/badge/', no include id ?
 export const SelectNFT: FC<StepItemProps> = (props) => {
   const { cyborg, badge, selectedAddress } = useGlobalStateContext()
+  const cyborgTokenIds = async () => await cyborg?.callStatic.tokensOfOwner(selectedAddress) as NFTItem['id'][]
+  const badgeTokenIds = async () => await badge?.callStatic.tokensOfOwner(selectedAddress) as NFTItem['id'][]
 
   const { data, loading } = useRequest<NFTItem[], any>(
-    () => getTokenURIs(
+    async () => getTokenURIs(
       [cyborg, badge], selectedAddress || '')
-    ([ERC721TokenIds, ERC1155TokenIds]
+    ([await cyborgTokenIds(), await badgeTokenIds()]
     )
   )
 
