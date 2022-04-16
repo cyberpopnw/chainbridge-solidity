@@ -29,9 +29,11 @@ export const SelectNFT: FC<StepItemProps> = (props) => {
       <>
         <div className="nft-select__wrapper">
           {
-           data?.map((NFT, index) => (
+            data?.length
+              ? data.map((NFT, index) => (
                 <NFTCard NFTItem={NFT} key={NFT.name} index={index}/>
               ))
+              : <h3 className="no-nft-available">No NFT available</h3>
           }
         </div>
         <Form.Item className="step__item__next-step__wrapper">

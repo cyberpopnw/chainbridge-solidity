@@ -80,6 +80,15 @@
   }
 }
 
+.no-nft-available {
+  grid-column-start: 1;
+  grid-column-end: 4;
+  font-size: 3rem;
+  text-align: center;
+  color: $color-primary;
+  margin: 0;
+}
+
 .target-address__button {
   cursor: pointer;
   transition: all .3s;
