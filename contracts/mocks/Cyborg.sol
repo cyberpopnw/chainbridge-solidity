@@ -35,6 +35,23 @@ contract Cyborg is
         _unpause();
     }
 
+    /**
+     * @dev Returns all the token IDs owned by address
+     */
+    function tokensOfOwner(address _addr)
+        external
+        view
+        returns (uint256[] memory)
+    {
+        uint256 balance = balanceOf(_addr);
+        uint256[] memory tokens = new uint256[](balance);
+        for (uint256 i = 0; i < balance; i++) {
+            tokens[i] = tokenOfOwnerByIndex(_addr, i);
+        }
+
+        return tokens;
+    }
+
     function safeMint(address to, uint256 tokenId)
         public
         onlyRole(MINTER_ROLE)

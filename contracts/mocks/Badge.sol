@@ -17,6 +17,7 @@ contract Badge is
     bytes32 public constant URI_SETTER_ROLE = keccak256("URI_SETTER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    uint256 public numOptions;
 
     constructor() ERC1155("https://api.cyberpop.online/badge/") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -27,6 +28,10 @@ contract Badge is
 
     function setURI(string memory newuri) public onlyRole(URI_SETTER_ROLE) {
         _setURI(newuri);
+    }
+
+    function setNumOptions(uint256 _num) external onlyRole(DEFAULT_ADMIN_ROLE) {
+      numOptions = _num;
     }
 
     function pause() public onlyRole(PAUSER_ROLE) {
@@ -53,6 +58,18 @@ contract Badge is
         bytes memory data
     ) public onlyRole(MINTER_ROLE) {
         _mintBatch(to, ids, amounts, data);
+    }
+
+    function batchBalanceOf(address account)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        uint256[] memory balances = new uint256[](numOptions);
+        for (uint256 i = 0; i < numOptions; i++) {
+            balances[i] = balanceOf(account, i);
+        }
+        return balances;
     }
 
     function _beforeTokenTransfer(
