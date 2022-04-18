@@ -6,11 +6,15 @@ import { ethers } from "ethers"
 import BridgeArtifact from "@/contracts/Bridge.json";
 import ERC20Artifact from "@/contracts/ERC20.json";
 import ERC721Artifact from "@/contracts/ERC721.json";
-import ERC1155Artifact from "@/contracts/ERC1155.json";
+import ERC1155Artifact from "@/contracts/Cyborg.json";
 
-import development from '@/contract-address/development.json'
-import geth from "@/contract-address/geth.json"
+// Testnet
+import rinkeby from '@/contract-address/rinkeby.json'
+import mumbai from "@/contract-address/mumbai.json"
 
+// Mainnet
+// import development from '@/contract-address/development.json'
+// import geth from '@/contract-address/geth.json'
 
 import type { FC } from 'react'
 import type { GlobalState } from './globalState'
@@ -104,7 +108,10 @@ const GlobalStateProvider: FC = ({ children }) => {
       }
     } else {
       setEventListener()
-      setContractAddress(network?.chainId === 5 ? development : geth)
+      // TestNet
+      setContractAddress(network?.chainId === 4 ? rinkeby : mumbai)
+      // Mainnet
+      // setContractAddress(network?.chainId === 4 ? development : geth)
       initializeContract()
     }
 
