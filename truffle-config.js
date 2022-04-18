@@ -130,5 +130,5 @@ module.exports = {
       }
     }
   },
-  contracts_build_directory: 'frontend/cyberpop-bridge/src/contracts'
+  contracts_build_directory: 'frontend/cyberpop-bridge-release/src/contracts'
 }

@@ -7,8 +7,10 @@ import BridgeArtifact from "@/contracts/Bridge.json";
 import ERC20Artifact from "@/contracts/ERC20.json";
 import ERC721Artifact from "@/contracts/ERC721.json";
 import ERC1155Artifact from "@/contracts/ERC1155.json";
-import mumbai from "@/contract-address/mumbai.json"
-import rinkeby from "@/contract-address/rinkeby.json"
+
+import development from '@/contract-address/development.json'
+import geth from "@/contract-address/geth.json"
+
 
 import type { FC } from 'react'
 import type { GlobalState } from './globalState'
@@ -102,12 +104,12 @@ const GlobalStateProvider: FC = ({ children }) => {
       }
     } else {
       setEventListener()
-      setContractAddress(mumbai)
+      setContractAddress(network?.chainId === 5 ? development : geth)
       initializeContract()
     }
 
     return () => { window.ethereum.removeAllListeners() }
-  }, [location.pathname, navigate, selectedAddress, initializeContract, provider])
+  }, [location.pathname, navigate, selectedAddress, initializeContract, provider, network?.chainId])
 
   const providerValue: Partial<GlobalState> = {
     badge,
