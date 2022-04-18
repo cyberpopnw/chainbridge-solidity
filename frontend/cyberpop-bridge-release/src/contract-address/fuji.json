@@ -1,5 +1,5 @@
 {
-  "network": "mumbai",
+  "network": "fuji",
   "bridge": "0xb978636d2611fC7dCf9B24FfC17E11AFB37D42D1",
   "erc20handler": "0x1F805fCEB8E812CA599996777493e565bEddB584",
   "erc721handler": "0x2ed6573D746F6879EE50767AB0B8ad79B733d357",

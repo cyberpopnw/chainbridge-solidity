@@ -6,7 +6,7 @@ import { ethers } from "ethers"
 import BridgeArtifact from "@/contracts/Bridge.json";
 import ERC20Artifact from "@/contracts/ERC20.json";
 import ERC721Artifact from "@/contracts/ERC721.json";
-import ERC1155Artifact from "@/contracts/Cyborg.json";
+import ERC1155Artifact from "@/contracts/ERC1155.json";
 
 // Testnet
 import rinkeby from '@/contract-address/rinkeby.json'
