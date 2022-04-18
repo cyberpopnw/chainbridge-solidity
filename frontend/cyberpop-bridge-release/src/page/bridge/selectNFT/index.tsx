@@ -14,14 +14,10 @@ import type { StepItemProps, NFTItem } from '@/page/bridge/selectNFT/type'
 // ERC1155 contract run uri(0) return 'https://api.cyberpop.online/badge/', no include id ?
 export const SelectNFT: FC<StepItemProps> = (props) => {
   const { cyborg, badge, selectedAddress } = useGlobalStateContext()
-  const cyborgTokenIds = async () => await cyborg?.callStatic.tokensOfOwner(selectedAddress) as NFTItem['id'][]
-  const badgeTokenIds = async () => await badge?.callStatic.tokensOfOwner(selectedAddress) as NFTItem['id'][]
+  const getTokenIds = async () => await cyborg?.callStatic.tokensOfOwner(selectedAddress) as NFTItem['id'][]
 
   const { data, loading } = useRequest<NFTItem[], any>(
-    async () => getTokenURIs(
-      [cyborg, badge], selectedAddress || '')
-    ([await cyborgTokenIds(), await badgeTokenIds()]
-    )
+    async () => getTokenURIs([cyborg, badge], selectedAddress || '')(await getTokenIds())
   )
 
   return (

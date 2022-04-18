@@ -9,10 +9,10 @@ import { NFTItem } from '@/page/bridge/selectNFT/type'
  * ids[0]: ERC721
  * ids[1]: ERC1155
 */
-export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddress: GlobalState['selectedAddress']) => (ids: unknown[][]) => (
+export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddress: GlobalState['selectedAddress']) => (ids: number[]) => (
   Promise.all([
       // ERC 721
-      Promise.all(ids[0].map(async ERC721Token => {
+      Promise.all(ids.map(async ERC721Token => {
         const tokenMetaData = await contracts[0]?.callStatic.tokenURI(ERC721Token).then(res => (
           axios.get(res).then(res => res.data)
         ))
@@ -24,11 +24,11 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
       })),
       // ERC1155
       new Promise(async (resolve) => {
-        const balanceOfBatch = await contracts[1]?.callStatic.batchBalanceOf([selectedAddress], [ids[1]])
+        const balanceOfBatch = await contracts[1]?.callStatic.batchBalanceOf(selectedAddress)
         const baseURI = await contracts[1]?.callStatic.uri(0)
-        const tokenMetaData = await Promise.all(ids[1].map(id => axios.get(baseURI + id).then(res => res.data)))
+        const tokenMetaData = await Promise.all(ids.map(id => axios.get(baseURI + id).then(res => res.data)))
 
-        return resolve(ids[1].map((id, index) => ({
+        return resolve(ids.map((id, index) => ({
           id,
           standard: 'ERC1155',
           amount: balanceOfBatch[index],

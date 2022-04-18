@@ -5,8 +5,8 @@ import { ethers } from "ethers"
 
 import BridgeArtifact from "@/contracts/Bridge.json";
 import ERC20Artifact from "@/contracts/ERC20.json";
-import ERC721Artifact from "@/contracts/ERC721.json";
-import ERC1155Artifact from "@/contracts/ERC1155.json";
+import ERC721Artifact from "@/contracts/Cyborg.json";
+import ERC1155Artifact from "@/contracts/Badge.json";
 
 // Testnet
 import rinkeby from '@/contract-address/rinkeby.json'
@@ -111,7 +111,7 @@ const GlobalStateProvider: FC = ({ children }) => {
       // TestNet
       setContractAddress(network?.chainId === 4 ? rinkeby : mumbai)
       // Mainnet
-      // setContractAddress(network?.chainId === 4 ? development : geth)
+      // setContractAddress(network?.chainId === 5 ? development : geth)
       initializeContract()
     }
 
