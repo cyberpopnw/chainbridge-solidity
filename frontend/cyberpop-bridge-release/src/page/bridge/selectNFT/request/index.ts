@@ -24,7 +24,7 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
       })),
       // ERC1155
       new Promise(async (resolve) => {
-        const balanceOfBatch = await contracts[1]?.callStatic.balanceOfBatch([selectedAddress], [ids[1]])
+        const balanceOfBatch = await contracts[1]?.callStatic.batchBalanceOf([selectedAddress], [ids[1]])
         const baseURI = await contracts[1]?.callStatic.uri(0)
         const tokenMetaData = await Promise.all(ids[1].map(id => axios.get(baseURI + id).then(res => res.data)))
 
