@@ -20,10 +20,12 @@ type FormValue = {
   targetChain: number;
   'nft-select': {
     selected: boolean;
-    id: unknown;
-    standard: string;
     action: 'transfer' | 'sell';
     amount?: number;
+    meta: {
+      standard: string;
+      id?: unknown;
+    }
   }[]
 }
 
@@ -82,16 +84,14 @@ const Bridge = () => {
       return Promise.reject('Selected NFT not found, Please check Step.2')
     }
 
-    switch (_values.selectedNFT.standard) {
+    switch (_values.selectedNFT.meta.standard) {
       case 'ERC721':
-        await cyborgDeposit(_values.targetChain, _values.targetAddress, _values.selectedNFT.id)
-        break;
+        return cyborgDeposit(_values.targetChain, _values.targetAddress, _values.selectedNFT.meta.id)
       case 'ERC1155':
-        await badgeDeposit(_values.targetChain, _values.targetAddress, _values.selectedNFT.id, _values.selectedNFT.amount || 0)
-        break;
+        return badgeDeposit(_values.targetChain, _values.targetAddress, _values.selectedNFT.meta.id, _values.selectedNFT.amount || 0)
+      default:
+        return Promise.reject('Not found match deposit function.')
     }
-
-    return Promise.resolve('Contract active')
   }
 
   return (
@@ -127,11 +127,11 @@ const Bridge = () => {
         onSubmit={(values: FormValue) => {
           setDepositLoading(true)
           deposit(values)
-            .then(res => {
-              Message.success(res)
+            .then(() => {
+              Message.success('Contract active')
             })
             .catch(e => {
-              Message.error(e)
+              Message.error(e.message || 'Transaction Failed')
             })
             .finally(() => {
               setDepositLoading(false)

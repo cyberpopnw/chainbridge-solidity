@@ -14,10 +14,9 @@ import type { StepItemProps, NFTItem } from '@/page/bridge/selectNFT/type'
 // ERC1155 contract run uri(0) return 'https://api.cyberpop.online/badge/', no include id ?
 export const SelectNFT: FC<StepItemProps> = (props) => {
   const { cyborg, badge, selectedAddress } = useGlobalStateContext()
-  const getTokenIds = async () => await cyborg?.callStatic.tokensOfOwner(selectedAddress) as NFTItem['id'][]
 
   const { data, loading } = useRequest<NFTItem[], any>(
-    async () => getTokenURIs([cyborg, badge], selectedAddress || '')(await getTokenIds())
+    async () => getTokenURIs([cyborg, badge], selectedAddress || '')
   )
 
   return (
@@ -27,7 +26,7 @@ export const SelectNFT: FC<StepItemProps> = (props) => {
           {
             data?.length
               ? data.map((NFT, index) => (
-                <NFTCard NFTItem={NFT} key={NFT.name} index={index}/>
+                <NFTCard NFTItem={NFT} key={`${NFT.standard} ${NFT.name}`} index={index}/>
               ))
               : <h3 className="no-nft-available">No NFT available</h3>
           }
