@@ -113,6 +113,7 @@ module.exports = {
       provider: () => new HDWalletProvider(mnemonic, `https://api.avax-test.network/ext/bc/C/rpc`),
       network_id: 43113,
       skipDryRun: true,
+      gasPrice: 50000000000,  // 20 gwei (in wei) (default: 100 gwei)
       production: false
     }
   },
