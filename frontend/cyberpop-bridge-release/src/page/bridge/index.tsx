@@ -113,7 +113,7 @@ const Bridge = () => {
             switchChain(sourceChain)
               .catch(e => {
                 Message.error(e.message)
-                formInstance.setFieldValue('sourceChain', getChain(network?.chainId) || 'unknown')
+                formInstance.setFieldValue('sourceChain', getChain(network?.chainId)?.chainId|| 'unknown')
               })
           }
         }}

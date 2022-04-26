@@ -9,7 +9,7 @@ const ChainSelect: FC<SelectProps> = (props) => {
   return (
     <Select {...props}>
       <Select.Option value="unknown" key="unknown">
-        UNKNOWN
+        Unknown Chain
       </Select.Option>
       {
         Object.keys(chainIds).map(key => (

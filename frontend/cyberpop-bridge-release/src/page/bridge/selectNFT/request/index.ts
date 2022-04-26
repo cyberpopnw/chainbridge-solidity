@@ -29,14 +29,15 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
 
         // in mock contract, batchBalanceOf needs to query the balance of tokens held using the numOption parameter
         // so this should be the same as numOption in the contract
-        const numOptions = 2
+        const numOptions = 3
 
         const balances: NFTItem['amount'][] = await contracts[1]?.callStatic.batchBalanceOf(selectedAddress)
 
         for (let i = 0; i < numOptions; i++) {
-          const balance = BigNumber.from(balances[i]).toNumber()
           // results with a number of zero are excluded
+          const balance = BigNumber.from(balances[i] || 0).toNumber()
           if (!balance) continue
+
           const id = i
           const baseURI = await contracts[1]?.callStatic.uri(id)
           const { data: metaData } = await axios.get(baseURI + id)

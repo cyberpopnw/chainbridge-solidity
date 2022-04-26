@@ -33,10 +33,11 @@ export const switchChain = (chainId: Chain['chainId']) => window.ethereum.reques
       chainId: utils.hexValue(chainId)
     },
   ],
-}).catch(async e => {
+}).catch(e => {
   // wallet not add selected network, call addChain function.
   if (e.code === 4902) {
     Message.warning('Please add network first.')
     return addChain(chainId)
   }
+  return Promise.reject(e)
 })
