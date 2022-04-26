@@ -1,13 +1,14 @@
 import { Button, Form, Message, Steps } from '@arco-design/web-react'
-import { ChooseAddressForm } from '@/page/bridge/chooseAddressForm'
 import { SelectNFT } from '@/page/bridge/selectNFT'
+import ChooseAddressForm from '@/component/chooseAddressForm'
 
 import { useState } from 'react'
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 import { useCyborgDeposit } from '@/hooks/useCyborgDeposit'
 import { useBadgeDeposit } from '@/hooks/useBadgeDeposit'
 
-import { utils } from 'ethers'
+import { getChain } from '@/lib/chainIds'
+import { switchChain } from '@/lib/metamask'
 
 import type { FC } from 'react'
 
@@ -15,7 +16,7 @@ import '@/page/bridge/index.scss'
 
 type FormValue = {
   sourceAddress: string;
-  sourceChain: number;
+  sourceChain: number | 'unknown';
   targetAddress: string;
   targetChain: number;
   'nft-select': {
@@ -64,7 +65,7 @@ const Bridge = () => {
   const { network } = useGlobalStateContext()
   const [currentStep, setCurrentStep] = useState(1)
   const [completedSteps, setCompletedSteps] = useState([1])
-  const [ depositLoading, setDepositLoading ] = useState(false)
+  const [depositLoading, setDepositLoading] = useState(false)
   const [formInstance] = Form.useForm()
   const cyborgDeposit = useCyborgDeposit()
   const badgeDeposit = useBadgeDeposit()
@@ -106,22 +107,14 @@ const Bridge = () => {
         layout="vertical"
         autoComplete="off"
         onValuesChange={value => {
-          if (network?.chainId && value['sourceChain'] && network?.chainId !== value['sourceChain']) {
-            window.ethereum.request({
-              method: 'wallet_switchEthereumChain',
-              params: [
-                {
-                  chainId: utils.hexValue(value['sourceChain']),
-                },
-              ],
-            }).catch(e => {
-              if (e.code === 4902) {
-                Message.error('Unrecognized chain. add the chain first.')
-              } else {
+          const chainId = network?.chainId
+          const { sourceChain } = value
+          if (chainId && sourceChain && chainId !== sourceChain && sourceChain !== 'unknown') {
+            switchChain(sourceChain)
+              .catch(e => {
                 Message.error(e.message)
-              }
-              formInstance.setFieldValue('sourceChain', network.chainId)
-            })
+                formInstance.setFieldValue('sourceChain', getChain(network?.chainId) || 'unknown')
+              })
           }
         }}
         onSubmit={(values: FormValue) => {

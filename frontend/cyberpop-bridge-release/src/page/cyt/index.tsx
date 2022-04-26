@@ -1,17 +1,21 @@
 import { Button, Form, Message, Steps } from '@arco-design/web-react'
-import { ChooseAddressForm } from '@/page/cyt/chooseAddressForm'
+import ChooseAddressForm from '@/component/chooseAddressForm'
+import { InputNumber } from '@/page/cyt/component/InputNumber'
 
 import { useState } from 'react'
 import { useCytDeposit } from '@/hooks/useCytDeposit'
+import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
+
+import { switchChain } from '@/lib/metamask'
+import { getChain } from '@/lib/chainIds'
 
 import type { FC } from 'react'
 
 import '@/page/bridge/index.scss'
-import { InputNumber } from '@/page/cyt/component/InputNumber'
 
 type FormValue = {
   sourceAddress: string;
-  sourceChain: number;
+  sourceChain: number | 'unknown';
   targetAddress: string;
   targetChain: number;
   amount: number;
@@ -49,6 +53,7 @@ const StepContent: FC<{
 }
 
 const CYT = () => {
+  const { network } = useGlobalStateContext()
   const [currentStep, setCurrentStep] = useState(1)
   const [completedSteps, setCompletedSteps] = useState([1])
   const [ depositLoading, setDepositLoading ] = useState(false)
@@ -81,6 +86,17 @@ const CYT = () => {
         labelCol={{ span: 0 }}
         layout="vertical"
         autoComplete="off"
+        onValuesChange={value => {
+          const chainId = network?.chainId
+          const { sourceChain } = value
+          if (chainId && sourceChain && chainId !== sourceChain && sourceChain !== 'unknown') {
+            switchChain(sourceChain)
+              .catch(e => {
+                Message.error(e.message)
+                formInstance.setFieldValue('sourceChain', getChain(network?.chainId) || 'unknown')
+              })
+          }
+        }}
         onSubmit={async  (values: FormValue) => {
           setDepositLoading(true)
           await deposit(values)

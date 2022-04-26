@@ -1,6 +1,9 @@
 @import 'src/scss/color';
 @import 'src/scss/flex';
 
+// Component
+@import 'src/component/chooseAddressForm';
+
 html, body {
   width: 100vw;
   height: 100vh;

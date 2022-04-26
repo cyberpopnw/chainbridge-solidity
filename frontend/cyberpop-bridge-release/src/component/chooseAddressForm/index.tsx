@@ -1,11 +1,17 @@
-import { Button, Form, Input } from '@arco-design/web-react'
-import { ChainSelect } from '@/page/cyt/chooseAddressForm/chainSelect'
+import ChainSelect from '@/component/chooseAddressForm/chainSelect'
+import { Button, Form, FormInstance, Input } from '@arco-design/web-react'
+
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 
 import type { FC } from 'react'
-import type { StepItemProps } from '@/page/cyt/type'
+import { getChain } from '@/lib/chainIds'
 
-export const ChooseAddressForm: FC<StepItemProps> = (props) => {
+export type StepItemProps = {
+  switchStep: () => void;
+  form: FormInstance
+}
+
+const ChooseAddressForm: FC<StepItemProps> = (props) => {
   const { selectedAddress, network } = useGlobalStateContext()
 
   const nextStep = () => {
@@ -20,7 +26,7 @@ export const ChooseAddressForm: FC<StepItemProps> = (props) => {
   return (
     <div className="choose-address-form">
       <Form.Item label="From" field="sourceChain" rules={[{ required: true, message: 'Source chain is required' }]}
-                 initialValue={network?.chainId}
+                 initialValue={getChain(network?.chainId)?.chainId || 'unknown'}
       >
         <ChainSelect placeholder="Select Source Chain"/>
       </Form.Item>
@@ -49,3 +55,5 @@ export const ChooseAddressForm: FC<StepItemProps> = (props) => {
     </div>
   )
 }
+
+export default ChooseAddressForm
