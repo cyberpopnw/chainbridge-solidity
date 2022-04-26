@@ -108,6 +108,12 @@ module.exports = {
       network_id: 4,
       skipDryRun: true,
       production: false
+    },
+    fuji: {
+      provider: () => new HDWalletProvider(mnemonic, `https://api.avax-test.network/ext/bc/C/rpc`),
+      network_id: 43113,
+      skipDryRun: true,
+      production: false
     }
   },
 
