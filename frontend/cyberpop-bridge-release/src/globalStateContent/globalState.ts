@@ -1,5 +1,5 @@
 import { providers, Contract } from 'ethers'
-import type { ContractAddress } from '@/types/contractAddress'
+import type { Network } from '@/contract-address'
 
 export type GlobalState = {
   provider: providers.Web3Provider;
@@ -7,7 +7,7 @@ export type GlobalState = {
   bridge: Contract;
   cyt: Contract;
   cyborg: Contract;
-  contractAddress: ContractAddress,
+  contractAddress: Promise<Network | undefined>,
   network?: providers.Network;
   selectedAddress: string | null;
   connectWallet: () => Promise<void>

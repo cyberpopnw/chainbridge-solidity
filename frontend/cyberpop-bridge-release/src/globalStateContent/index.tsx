@@ -1,4 +1,4 @@
-import { Notification } from '@arco-design/web-react'
+import { Message, Notification } from '@arco-design/web-react'
 import { createContext, useState, useCallback, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ethers } from "ethers"
@@ -8,16 +8,9 @@ import ERC20Artifact from "@/contracts/ERC20.json";
 import ERC721Artifact from "@/contracts/Cyborg.json";
 import ERC1155Artifact from "@/contracts/Badge.json";
 
-// Testnet
-import rinkeby from '@/contract-address/rinkeby.json'
-import mumbai from "@/contract-address/mumbai.json"
-
-// Mainnet
-// import development from '@/contract-address/development.json'
-// import geth from '@/contract-address/geth.json'
-
 import type { FC } from 'react'
 import type { GlobalState } from './globalState'
+import type { Network } from '@/contract-address'
 
 export const GlobalStateContext = createContext<Partial<GlobalState> | undefined>(undefined);
 GlobalStateContext.displayName = 'GlobalStateContext';
@@ -35,34 +28,34 @@ const GlobalStateProvider: FC = ({ children }) => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const initializeContract = useCallback(() => {
-    if (!contractAddress) return
+  const initializeContract = useCallback((contract: Network) => {
+    if (!contract) return
 
     setBridge(() => new ethers.Contract(
-      contractAddress.bridge,
+      contract.bridge,
       BridgeArtifact.abi,
       provider.getSigner(0)
     ))
 
     setCYT(() => new ethers.Contract(
-      contractAddress.cyt,
+      contract.cyt,
       ERC20Artifact.abi,
       provider.getSigner(0)
     ))
 
     setCyborg(() => new ethers.Contract(
-      contractAddress.cyborg,
+      contract.cyborg,
       ERC721Artifact.abi,
       provider.getSigner(0)
     ))
 
     setBadge(() => new ethers.Contract(
-      contractAddress.badge,
+      contract.badge,
       ERC1155Artifact.abi,
       provider.getSigner(0)
     ))
 
-  }, [contractAddress, provider])
+  }, [provider])
 
   const connectWallet = async () => await window.ethereum.request<string[]>({ method: 'eth_requestAccounts' }).then(async res => {
     setSelectedAddress(res?.[0])
@@ -108,11 +101,24 @@ const GlobalStateProvider: FC = ({ children }) => {
       }
     } else {
       setEventListener()
-      // TestNet
-      setContractAddress(network?.chainId === 4 ? rinkeby : mumbai)
-      // Mainnet
-      // setContractAddress(network?.chainId === 5 ? development : geth)
-      initializeContract()
+
+      // load network contract
+      setContractAddress(() => import('@/contract-address')
+        .then(module => {
+          let contract = module.fuji
+          switch (network?.chainId) {
+            case 80001:
+              contract = module.mumbai;
+              break;
+          }
+          initializeContract(contract)
+          return contract
+        })
+        .catch(() => {
+          Message.error('Contract address load error');
+          return undefined
+        })
+      )
     }
 
     return () => { window.ethereum.removeAllListeners() }
