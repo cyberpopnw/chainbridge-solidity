@@ -11,6 +11,6 @@ export const useCyborgDeposit = () => {
       utils.hexZeroPad(BigNumber.from(tokenId).toHexString(), 32).substring(2) +
       utils.hexZeroPad(utils.hexlify((to.length - 2) / 2), 32).substring(2) +
       to.substring(2);
-    await bridge?.deposit(chainId, process.env.REACT_APP_CyborgResourceID, data)
+    return bridge?.deposit(chainId, process.env.REACT_APP_CyborgResourceID, data)
   }
 }

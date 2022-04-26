@@ -8,8 +8,9 @@ export const useBadgeDeposit = () => {
     const handler = await bridge?.callStatic._resourceIDToHandlerAddress(process.env.REACT_APP_BadgeResourceID)
 
     const isApproved = await badge?.callStatic.isApprovedForAll(selectedAddress, handler)
+
     if (!isApproved) {
-      (await badge?.callStatic.setApprovalForAll(handler, true)).wait()
+      await badge?.callStatic.setApprovalForAll(handler, true)
     }
 
     const data = '0x' +
