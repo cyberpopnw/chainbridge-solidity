@@ -1,8 +1,11 @@
-import { Contract } from 'ethers'
 import axios from 'axios'
 import { BigNumber } from 'ethers'
-import { GlobalState } from '@/globalStateContent/globalState'
-import { NFTItem } from '@/page/bridge/selectNFT/type'
+
+import { ERC1155TokenList } from '@/lib/ERC1155TokenList'
+
+import type { Contract } from 'ethers'
+import type { GlobalState } from '@/globalStateContent/globalState'
+import type { NFTItem } from '@/page/bridge/selectNFT/type'
 
 /*
  * contracts[0]: ERC721
@@ -27,13 +30,12 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
       new Promise(async (resolve) => {
         const result = []
 
-        // in mock contract, batchBalanceOf needs to query the balance of tokens held using the numOption parameter
-        // so this should be the same as numOption in the contract
-        const numOptions = 3
+        const balances: NFTItem['amount'][] = await contracts[1]?.callStatic.balanceOfBatch(
+          Array.from({ length: ERC1155TokenList.length }, () => selectedAddress || ''),
+          ERC1155TokenList
+        )
 
-        const balances: NFTItem['amount'][] = await contracts[1]?.callStatic.batchBalanceOf(selectedAddress)
-
-        for (let i = 0; i < numOptions; i++) {
+        for (let i = 0; i < ERC1155TokenList.length; i++) {
           // results with a number of zero are excluded
           const balance = BigNumber.from(balances[i] || 0).toNumber()
           if (!balance) continue

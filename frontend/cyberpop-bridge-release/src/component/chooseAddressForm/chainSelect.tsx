@@ -1,6 +1,9 @@
 import { Select } from '@arco-design/web-react'
+
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
+
 import chainIds, { getChain } from '@/lib/chainIds'
+
 import type { SelectProps } from '@arco-design/web-react'
 import type { FC } from 'react'
 

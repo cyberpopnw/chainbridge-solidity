@@ -32,7 +32,8 @@ export const SelectNFT: FC<StepItemProps> = (props) => {
           }
         </div>
         <Form.Item className="step__item__next-step__wrapper">
-          <Button type="primary" size="large" className="step__item__next-step__button" onClick={props.switchStep}>Next</Button>
+          <Button type="primary" size="large" className="step__item__next-step__button"
+                  onClick={props.switchStep}>Next</Button>
         </Form.Item>
       </>
     </Spin>
