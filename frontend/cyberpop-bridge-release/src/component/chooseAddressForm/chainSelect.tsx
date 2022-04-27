@@ -1,16 +1,20 @@
 import { Select } from '@arco-design/web-react'
-
-import chainIds from '@/lib/chainIds'
-
+import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
+import chainIds, { getChain } from '@/lib/chainIds'
 import type { SelectProps } from '@arco-design/web-react'
 import type { FC } from 'react'
 
 const ChainSelect: FC<SelectProps> = (props) => {
+  const { network } = useGlobalStateContext()
   return (
     <Select {...props}>
-      <Select.Option value="unknown" key="unknown">
-        Unknown Chain
-      </Select.Option>
+      {
+        !getChain(network?.chainId) && (
+          <Select.Option value="unknown" key="unknown">
+            Unknown Chain
+          </Select.Option>
+        )
+      }
       {
         Object.keys(chainIds).map(key => (
           <Select.Option key={chainIds[key].chainName} value={chainIds[key].chainId}>
