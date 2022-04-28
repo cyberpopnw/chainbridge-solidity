@@ -14,10 +14,10 @@ import type { NFTItem } from '@/page/bridge/selectNFT/type'
 export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddress: GlobalState['selectedAddress']) => (
   Promise.all([
       // ERC 721
-      contracts[0]?.callStatic?.tokensOfOwner(selectedAddress).then((ERC721Tokens: NFTItem['id'][]) => (
+      contracts[0]?.tokensOfOwner(selectedAddress).then((ERC721Tokens: NFTItem['id'][]) => (
         Promise.all(ERC721Tokens.map(async ERC721Token => {
-          const metaData = await contracts[0]?.callStatic.tokenURI(ERC721Token).then(res => (
-            axios.get(res).then(res => res.data)
+          const metaData = await contracts[0]?.tokenURI(ERC721Token).then((uri: string) => (
+            axios.get(uri).then(res => res.data)
           ))
           return Promise.resolve({
             id: ERC721Token,
@@ -30,7 +30,7 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
       new Promise(async (resolve) => {
         const result = []
 
-        const balances: NFTItem['amount'][] = await contracts[1]?.callStatic.balanceOfBatch(
+        const balances: NFTItem['amount'][] = await contracts[1]?.balanceOfBatch(
           Array.from({ length: ERC1155TokenList.length }, () => selectedAddress || ''),
           ERC1155TokenList
         )
@@ -41,7 +41,7 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
           if (!balance) continue
 
           const id = i
-          const baseURI = await contracts[1]?.callStatic.uri(id)
+          const baseURI = await contracts[1]?.uri(id)
           const { data: metaData } = await axios.get(baseURI + id)
           result.push({
             id,

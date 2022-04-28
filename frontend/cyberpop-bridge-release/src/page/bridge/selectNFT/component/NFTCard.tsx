@@ -52,7 +52,7 @@ export const NFTCard: FC<{
         <Radio.Group className="action-button__group" name={NFTItem.name} type="button">
           {
             ['transfer', 'sell'].map(item => (
-              <Radio value={item}>
+              <Radio value={item} key={item}>
                 {
                   ({ checked }: { checked: boolean }) => (
                     <button

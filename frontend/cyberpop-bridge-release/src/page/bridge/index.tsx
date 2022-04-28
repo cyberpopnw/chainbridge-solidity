@@ -76,11 +76,18 @@ const Bridge = () => {
   }
 
   const deposit = async (values: FormValue) => {
-    const _values = {
-      ...values,
-      'selectedNFT': values['nft-select'].find(nft => nft.selected)
+    if (values.sourceChain === 'unknown') {
+      return Promise.reject({ message: 'SourceChain cannot be unknown' })
     }
 
+    const _values = {
+      ...values,
+      sourceChain: getChain(values.sourceChain)?.bridgeId,
+      targetChain: getChain(values.targetChain)?.bridgeId,
+      selectedNFT: values['nft-select'].find(nft => nft.selected)
+    }
+
+    // TODO: change field validate
     if (!_values.selectedNFT) {
       return Promise.reject('Selected NFT not found, Please check Step.2')
     }

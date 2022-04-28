@@ -1,16 +1,20 @@
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 import { utils, BigNumber } from 'ethers'
+import waitForTransaction from '@/utils/waitForTransaction'
 
 export const useBadgeDeposit = () => {
   const { badge, bridge, selectedAddress } = useGlobalStateContext()
 
-  return async (chainId: number, to: string, tokenId: unknown, amount: number) => {
-    const handler = await bridge?.callStatic._resourceIDToHandlerAddress(process.env.REACT_APP_BadgeResourceID)
+  return async (chainId: number | undefined, to: string, tokenId: unknown, amount: number) => {
+    if (chainId == null) {
+      return Promise.reject({ message: 'Chain ID is required.' })
+    }
 
-    const isApproved = await badge?.callStatic.isApprovedForAll(selectedAddress, handler)
+    const handler = await bridge?._resourceIDToHandlerAddress(process.env.REACT_APP_BadgeResourceID)
 
+    const isApproved = await badge?.isApprovedForAll(selectedAddress, handler)
     if (!isApproved) {
-      await badge?.callStatic.setApprovalForAll(handler, true)
+      await waitForTransaction(await badge?.setApprovalForAll(handler, true))
     }
 
     const data = '0x' +
@@ -19,6 +23,8 @@ export const useBadgeDeposit = () => {
       utils.hexZeroPad(utils.hexlify((to.length - 2) / 2), 32).substring(2) +
       to.substring(2);
 
-    return bridge?.deposit(chainId, process.env.REACT_APP_BadgeResourceID, data)
+    return waitForTransaction(
+      await bridge?.deposit(chainId, process.env.REACT_APP_BadgeResourceID, data)
+    )
   }
 }

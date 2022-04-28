@@ -1,6 +1,7 @@
 export type Chain = {
   chainName: string;
   chainId: number;
+  bridgeId: number;
   nativeCurrency: {
     name: string;
     symbol: string;
@@ -15,6 +16,7 @@ const chainIds: Record<string, Chain> = {
   "mumbai": {
     "chainName": "Mumbai",
     "chainId": 80001,
+    "bridgeId": 0,
     "nativeCurrency": {
       "name": "MATIC",
       "symbol": "MATIC",
@@ -27,6 +29,7 @@ const chainIds: Record<string, Chain> = {
   "fuji": {
     "chainName": "Avalanche Fuji Testnet",
     "chainId": 43113,
+    "bridgeId": 1,
     "nativeCurrency": {
       "name": "AVAX",
       "symbol": "AVAX",
@@ -49,8 +52,6 @@ export const getChain = (chainId?: Chain['chainId']) => {
   }
   return result
 }
-
-export const getChainIdList = () => Object.values(chainIds).map(chain => chain.chainId)
 
 
 export default chainIds
