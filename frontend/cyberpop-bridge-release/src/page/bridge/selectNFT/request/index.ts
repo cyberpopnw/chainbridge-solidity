@@ -40,7 +40,7 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
           const balance = BigNumber.from(balances[i] || 0).toNumber()
           if (!balance) continue
 
-          const id = i
+          const id = ERC1155TokenList[i]
           const baseURI = await contracts[1]?.uri(id)
           const { data: metaData } = await axios.get(baseURI + id)
           result.push({
