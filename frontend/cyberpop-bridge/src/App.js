@@ -21,6 +21,7 @@ import { QueryResource } from "./components/QueryResource"
 import { Admin } from "./components/Admin"
 import { Collections } from "./components/Collections"
 import { Status } from "./components/Status"
+import { Staking } from "./components/Staking"
 import { AppContext } from "./hooks/AppContext";
 
 import mumbai from "./contract-address/mumbai.json"
@@ -143,6 +144,9 @@ function App() {
             <li className="nav-item">
               <Link className="nav-link" to="/status">Status</Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/staking">Staking</Link>
+            </li>
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Admin
@@ -203,6 +207,9 @@ function App() {
             </Route>
             <Route path="/status">
               <Status api="http://localhost:8090" />
+            </Route>
+            <Route path="/staking">
+              <Staking cyt={erc20} easyStaking />
             </Route>
           </div>
         </div>
