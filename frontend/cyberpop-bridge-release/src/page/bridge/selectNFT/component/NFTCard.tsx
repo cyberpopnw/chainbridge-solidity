@@ -1,6 +1,5 @@
-import { Checkbox, Form, Image, Input, Radio, Tag } from '@arco-design/web-react'
+import { Checkbox, Form, Image, Input, Tag, InputNumber } from '@arco-design/web-react'
 import { IconCheck } from '@arco-design/web-react/icon'
-import { InputNumber } from '@/page/bridge/selectNFT/component/InputNumber'
 
 import type { FC } from 'react'
 import type { NFTItem } from '@/page/bridge/selectNFT/type'
@@ -45,25 +44,12 @@ export const NFTCard: FC<{
           )}
         </Checkbox>
       </Form.Item>
-      <Form.Item field={filed + '.amount'} hidden={NFTItem.standard !== 'ERC1155'} disabled={NFTItem.standard !== 'ERC1155'}>
-        <InputNumber />
-      </Form.Item>
-      <Form.Item field={filed + '.action'} initialValue="transfer">
-        <Radio.Group className="action-button__group" name={NFTItem.name} type="button">
-          {
-            ['transfer', 'sell'].map(item => (
-              <Radio value={item} key={item}>
-                {
-                  ({ checked }: { checked: boolean }) => (
-                    <button
-                      className={`action-button__item ${ checked ? 'action-button__item--checked' : '' }`}
-                    >{ item.toUpperCase() }</button>
-                  )
-                }
-              </Radio>
-            ))
-          }
-        </Radio.Group>
+      <Form.Item
+        field={filed + '.amount'}
+        hidden={NFTItem.standard !== 'ERC1155'}
+        disabled={NFTItem.standard !== 'ERC1155'}
+      >
+        <InputNumber min={0} max={NFTItem.amount} mode="button" placeholder="Amount" style={{ width: '80%' }}/>
       </Form.Item>
     </div>
   )

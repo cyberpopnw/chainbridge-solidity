@@ -1,8 +1,8 @@
-import { Button, Form, Message, Steps } from '@arco-design/web-react'
+import { Button, Form, Message, Steps, InputNumber, Spin } from '@arco-design/web-react'
 import ChooseAddressForm from '@/component/chooseAddressForm'
-import { InputNumber } from '@/page/cyt/component/InputNumber'
 
 import { useState } from 'react'
+import { useRequest } from 'ahooks'
 import { useCytDeposit } from '@/hooks/useCytDeposit'
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 
@@ -53,17 +53,23 @@ const StepContent: FC<{
 }
 
 const CYT = () => {
-  const { network } = useGlobalStateContext()
+  const { network, cyt, selectedAddress } = useGlobalStateContext()
+
   const [currentStep, setCurrentStep] = useState(1)
   const [completedSteps, setCompletedSteps] = useState([1])
+
   const [ depositLoading, setDepositLoading ] = useState(false)
+
   const [formInstance] = Form.useForm()
+
   const cytDeposit = useCytDeposit()
 
   const switchStep = (nextStepIndex: number) => () => {
     setCurrentStep(nextStepIndex)
     setCompletedSteps(old => [...old, nextStepIndex - 1])
   }
+
+  const { data: cytBalance, loading } = useRequest<number, any[]>(cyt?.balanceOf(selectedAddress))
 
   const deposit = async (values: FormValue) => {
     cytDeposit(values.targetChain, values.targetAddress, values.amount)
@@ -118,8 +124,10 @@ const CYT = () => {
                 disabled={currentStep !== 2 && !completedSteps.includes(2)}
                 disabledText={stepTitle[2].disabledText}
               >
-                <Form.Item field="amount" wrapperCol={{ span: 24 }}>
-                  <InputNumber />
+                <Form.Item field="amount">
+                  <Spin loading={loading}>
+                    <InputNumber min={0} max={cytBalance || 0} mode="button" placeholder="Amount" style={{ padding: '2rem 0' }}/>
+                  </Spin>
                 </Form.Item>
                 <Form.Item className="step__item__next-step__wrapper">
                   <Button type="primary" size="large" className="step__item__next-step__button" onClick={switchStep(3)}>Next</Button>
