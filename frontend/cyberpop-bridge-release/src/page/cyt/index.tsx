@@ -1,4 +1,4 @@
-import { Button, Form, Message, Steps, InputNumber, Spin } from '@arco-design/web-react'
+import { Button, Form, Message, Steps, InputNumber } from '@arco-design/web-react'
 import ChooseAddressForm from '@/component/chooseAddressForm'
 
 import { useState } from 'react'
@@ -6,6 +6,7 @@ import { useRequest } from 'ahooks'
 import { useCytDeposit } from '@/hooks/useCytDeposit'
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 
+import { BigNumber } from 'ethers'
 import { switchChain } from '@/lib/metamask'
 import { getChain } from '@/lib/chainIds'
 
@@ -58,8 +59,6 @@ const CYT = () => {
   const [currentStep, setCurrentStep] = useState(1)
   const [completedSteps, setCompletedSteps] = useState([1])
 
-  const [ depositLoading, setDepositLoading ] = useState(false)
-
   const [formInstance] = Form.useForm()
 
   const cytDeposit = useCytDeposit()
@@ -69,17 +68,26 @@ const CYT = () => {
     setCompletedSteps(old => [...old, nextStepIndex - 1])
   }
 
-  const { data: cytBalance, loading } = useRequest<number, any[]>(cyt?.balanceOf(selectedAddress))
+  const { data: cytBalance } = useRequest<number, any[]>(() => (
+    cyt?.balanceOf(selectedAddress).then((res: any) => (
+      BigNumber.from(res).toNumber()
+    ))),
+    {
+      refreshDeps: [cyt, selectedAddress]
+    }
+  )
 
-  const deposit = async (values: FormValue) => {
+  const { run: deposit, loading: depositLoading } = useRequest<any, [FormValue]>(values => (
     cytDeposit(values.targetChain, values.targetAddress, values.amount)
-      .then(() => {
-        Message.success('Contract active')
-      })
-      .catch(e => {
-        Message.error(e)
-      })
-  }
+  ), {
+    manual: true,
+    onSuccess () {
+      Message.success('Contract Active')
+    },
+    onError (e) {
+      Message.error(e.message)
+    }
+  })
 
   return (
     <>
@@ -103,11 +111,7 @@ const CYT = () => {
               })
           }
         }}
-        onSubmit={async  (values: FormValue) => {
-          setDepositLoading(true)
-          await deposit(values)
-          setDepositLoading(false)
-        }}
+        onSubmit={deposit}
       >
         <Steps className="step__wrapper" current={currentStep} direction="vertical" lineless>
           <Step
@@ -125,31 +129,17 @@ const CYT = () => {
                 disabledText={stepTitle[2].disabledText}
               >
                 <Form.Item field="amount">
-                  <Spin loading={loading}>
-                    <InputNumber min={0} max={cytBalance || 0} mode="button" placeholder="Amount" style={{ padding: '2rem 0' }}/>
-                  </Spin>
+                  <InputNumber min={1} max={cytBalance || 0} mode="button" placeholder="Amount" />
                 </Form.Item>
                 <Form.Item className="step__item__next-step__wrapper">
-                  <Button type="primary" size="large" className="step__item__next-step__button" onClick={switchStep(3)}>Next</Button>
-                </Form.Item>
-              </StepContent>
-            }
-          />
-          <Step
-            title={stepTitle[3].title}
-            description={
-              <StepContent
-                disabled={currentStep !== 3 && !completedSteps.includes(3)}
-                disabledText={stepTitle[3].disabledText}
-              >
-                <div className="flex-center">
                   <Button
                     className="step__item__next-step__button"
                     type="primary"
+                    status="success"
                     htmlType="submit"
                     loading={depositLoading}
-                  >Confirm</Button>
-                </div>
+                  >Transfer</Button>
+                </Form.Item>
               </StepContent>
             }
           />

@@ -14,30 +14,30 @@ export type Chain = {
 
 const chainIds: Record<string, Chain> = {
   "mumbai": {
-    "chainName": "Mumbai",
-    "chainId": 80001,
-    "bridgeId": 0,
-    "nativeCurrency": {
+    chainName: "Mumbai",
+    chainId: 80001,
+    bridgeId: 0,
+    nativeCurrency: {
       "name": "MATIC",
       "symbol": "MATIC",
       "decimals": 18
     },
-    "rpcUrls": ['https://rpc-mumbai.maticvigil.com', 'https://matic-mumbai.chainstacklabs.com'],
-    "blockExplorerUrls": ['https://mumbai.polygonscan.com/'],
-    "logo": "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=022"
+    rpcUrls: ['https://rpc-mumbai.maticvigil.com', 'https://matic-mumbai.chainstacklabs.com'],
+    blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
+    logo: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=022",
   },
   "fuji": {
-    "chainName": "Avalanche Fuji Testnet",
-    "chainId": 43113,
-    "bridgeId": 1,
-    "nativeCurrency": {
+    chainName: "Avalanche Fuji Testnet",
+    chainId: 43113,
+    bridgeId: 1,
+    nativeCurrency: {
       "name": "AVAX",
       "symbol": "AVAX",
       "decimals": 18
     },
-    "rpcUrls": ["https://api.avax-test.network/ext/bc/C/rpc"],
-    "blockExplorerUrls": ["https://testnet.snowtrace.io"],
-    "logo": "	https://nftrade.com/img/chains/icons/avax.png"
+    rpcUrls: ["https://api.avax-test.network/ext/bc/C/rpc"],
+    blockExplorerUrls: ["https://testnet.snowtrace.io"],
+    logo: "	https://nftrade.com/img/chains/icons/avax.png",
   }
 }
 

@@ -12,7 +12,7 @@ import type { StepItemProps, NFTItem } from '@/page/bridge/selectNFT/type'
 // TODO: nft list lazy load and virtual list
 // ERC1155 contract run balanceOfBatch([playerAddress], [0]) is work,balanceOfBatch([playerAddress], [0, 1]) not work.
 // ERC1155 contract run uri(0) return 'https://api.cyberpop.online/badge/', no include id ?
-export const SelectNFT: FC<StepItemProps> = (props) => {
+export const SelectNFT: FC<StepItemProps & { loading?: boolean }> = () => {
   const { cyborg, badge, selectedAddress } = useGlobalStateContext()
 
   const { data, loading } = useRequest<NFTItem[], any>(
@@ -32,8 +32,13 @@ export const SelectNFT: FC<StepItemProps> = (props) => {
           }
         </div>
         <Form.Item className="step__item__next-step__wrapper">
-          <Button type="primary" size="large" className="step__item__next-step__button"
-                  onClick={props.switchStep}>Next</Button>
+          <Button
+            className="step__item__next-step__button"
+            loading={loading}
+            type='primary'
+            status="success"
+            htmlType="submit"
+          >Transfer</Button>
         </Form.Item>
       </>
     </Spin>

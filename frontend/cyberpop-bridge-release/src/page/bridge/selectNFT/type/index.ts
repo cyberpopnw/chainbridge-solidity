@@ -1,7 +1,7 @@
 import type { FormInstance } from '@arco-design/web-react'
 
 export type StepItemProps = {
-  switchStep: () => void;
+  switchStep?: () => void;
   form: FormInstance
 }
 

@@ -19,7 +19,7 @@ export const useCytDeposit = () => {
       to.substring(2);
 
     return waitForTransaction(
-      await bridge?.deposit(chainId, process.env.REACT_APP_CytResourceID, data)
+      await bridge?.deposit(chainId === 80001 ? '0' : '1', process.env.REACT_APP_CytResourceID, data)
     )
   }
 }

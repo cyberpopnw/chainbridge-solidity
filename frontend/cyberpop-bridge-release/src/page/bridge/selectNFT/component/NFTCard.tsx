@@ -1,5 +1,6 @@
-import { Checkbox, Form, Image, Input, Tag, InputNumber } from '@arco-design/web-react'
+import { Checkbox, Form, Input, Tag, InputNumber } from '@arco-design/web-react'
 import { IconCheck } from '@arco-design/web-react/icon'
+import Img from '@/component/Image'
 
 import type { FC } from 'react'
 import type { NFTItem } from '@/page/bridge/selectNFT/type'
@@ -23,16 +24,16 @@ export const NFTCard: FC<{
       <Form.Item field={filed + '.meta'} initialValue={{ id: NFTItem.id, standard: NFTItem.standard }} hidden>
         <Input readOnly />
       </Form.Item>
-      <Form.Item field={filed + '.selected'}>
-        <Checkbox key={NFTItem.name} value={NFTItem.name}>
+      <Form.Item field={filed + '.selected'} >
+        <Checkbox key={NFTItem.name} value={NFTItem.name} className="nft-card__checkbox">
           {({ checked }: { checked: boolean }) => (
-            <div className={`nft-card__checkbox ${checked ? 'nft-card__checkbox--checked' : ''}`}>
+            <div className={`${checked ? 'nft-card__checkbox--checked' : ''}`}>
               <StandardTag standard={NFTItem.standard} />
               <div className="nft-card__checkbox__dot">
                 <IconCheck />
               </div>
               <div className="nft-card__meta__wrapper">
-                <Image
+                <Img
                   className="nft-card__meta__image"
                   src={NFTItem.image}
                   preview={false}
@@ -49,7 +50,7 @@ export const NFTCard: FC<{
         hidden={NFTItem.standard !== 'ERC1155'}
         disabled={NFTItem.standard !== 'ERC1155'}
       >
-        <InputNumber min={0} max={NFTItem.amount} mode="button" placeholder="Amount" style={{ width: '80%' }}/>
+        <InputNumber min={1} max={NFTItem.amount} mode="button" placeholder="Amount" style={{ width: '80%' }}/>
       </Form.Item>
     </div>
   )

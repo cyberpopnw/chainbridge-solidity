@@ -1,8 +1,9 @@
-import { Button, Form, Message, Steps } from '@arco-design/web-react'
+import { Form, Message, Steps } from '@arco-design/web-react'
 import { SelectNFT } from '@/page/bridge/selectNFT'
 import ChooseAddressForm from '@/component/chooseAddressForm'
 
 import { useState } from 'react'
+import { useRequest } from 'ahooks'
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 import { useCyborgDeposit } from '@/hooks/useCyborgDeposit'
 import { useBadgeDeposit } from '@/hooks/useBadgeDeposit'
@@ -21,7 +22,6 @@ type FormValue = {
   targetChain: number;
   'nft-select': {
     selected: boolean;
-    action: 'transfer' | 'sell';
     amount?: number;
     meta: {
       standard: string;
@@ -65,7 +65,6 @@ const Bridge = () => {
   const { network } = useGlobalStateContext()
   const [currentStep, setCurrentStep] = useState(1)
   const [completedSteps, setCompletedSteps] = useState([1])
-  const [depositLoading, setDepositLoading] = useState(false)
   const [formInstance] = Form.useForm()
   const cyborgDeposit = useCyborgDeposit()
   const badgeDeposit = useBadgeDeposit()
@@ -75,32 +74,41 @@ const Bridge = () => {
     setCompletedSteps(old => [...old, nextStepIndex - 1])
   }
 
-  const deposit = async (values: FormValue) => {
-    if (values.sourceChain === 'unknown') {
+  const { run: deposit, loading } = useRequest<any, [FormValue]>(value => {
+    if (value.sourceChain === 'unknown') {
       return Promise.reject({ message: 'SourceChain cannot be unknown' })
     }
 
-    const _values = {
-      ...values,
-      sourceChain: getChain(values.sourceChain)?.bridgeId,
-      targetChain: getChain(values.targetChain)?.bridgeId,
-      selectedNFT: values['nft-select'].find(nft => nft.selected)
+    const _value = {
+      ...value,
+      sourceChain: getChain(value.sourceChain)?.bridgeId,
+      targetChain: getChain(value.targetChain)?.bridgeId,
+      selectedNFT: value['nft-select'].find(nft => nft.selected)
     }
 
     // TODO: change field validate
-    if (!_values.selectedNFT) {
-      return Promise.reject('Selected NFT not found, Please check Step.2')
+    if (!_value.selectedNFT) {
+      return Promise.reject('Selected NFT not found, Please check.')
     }
 
-    switch (_values.selectedNFT.meta.standard) {
+    switch (_value.selectedNFT.meta.standard) {
       case 'ERC721':
-        return cyborgDeposit(_values.targetChain, _values.targetAddress, _values.selectedNFT.meta.id)
+        return cyborgDeposit(_value.targetChain, _value.targetAddress, _value.selectedNFT.meta.id)
       case 'ERC1155':
-        return badgeDeposit(_values.targetChain, _values.targetAddress, _values.selectedNFT.meta.id, _values.selectedNFT.amount || 0)
+        return badgeDeposit(_value.targetChain, _value.targetAddress, _value.selectedNFT.meta.id, _value.selectedNFT.amount || 0)
       default:
         return Promise.reject('Not found match deposit function.')
     }
-  }
+  }, {
+    manual: true,
+    onSuccess () {
+      Message.success('Contract Active')
+    },
+    onError (e) {
+      Message.error(e.message)
+    }
+  })
+
 
   return (
     <>
@@ -124,19 +132,7 @@ const Bridge = () => {
               })
           }
         }}
-        onSubmit={(values: FormValue) => {
-          setDepositLoading(true)
-          deposit(values)
-            .then(() => {
-              Message.success('Contract active')
-            })
-            .catch(e => {
-              Message.error(e.message || 'Transaction Failed')
-            })
-            .finally(() => {
-              setDepositLoading(false)
-            })
-        }}
+        onSubmit={deposit}
       >
         <Steps className="step__wrapper" current={currentStep} direction="vertical" lineless>
           <Step
@@ -150,25 +146,7 @@ const Bridge = () => {
                 disabled={currentStep !== 2 && !completedSteps.includes(2)}
                 disabledText={stepTitle[2].disabledText}
               >
-                <SelectNFT form={formInstance} switchStep={switchStep(3)}/>
-              </StepContent>
-            }
-          />
-          <Step
-            title={stepTitle[3].title}
-            description={
-              <StepContent
-                disabled={currentStep !== 3 && !completedSteps.includes(3)}
-                disabledText={stepTitle[3].disabledText}
-              >
-                <div className="flex-center">
-                  <Button
-                    className="step__item__next-step__button"
-                    type="primary"
-                    htmlType="submit"
-                    loading={depositLoading}
-                  >Confirm</Button>
-                </div>
+                <SelectNFT form={formInstance} loading={loading} />
               </StepContent>
             }
           />
