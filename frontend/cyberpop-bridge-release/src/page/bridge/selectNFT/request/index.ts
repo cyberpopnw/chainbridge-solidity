@@ -22,6 +22,7 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
           return Promise.resolve({
             id: ERC721Token,
             standard: 'ERC721',
+            amount: 1,
             ...metaData
           })
         })))
