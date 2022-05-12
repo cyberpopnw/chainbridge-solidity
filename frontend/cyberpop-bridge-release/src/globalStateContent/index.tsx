@@ -66,17 +66,18 @@ const GlobalStateProvider: FC = ({ children }) => {
     window.ethereum.on('accountsChanged', (accounts) => {
       if (Array.isArray(accounts) && accounts.length) {
         Notification.info({
-          title: 'Account Changed',
-          content: `New account: ${accounts[0]}`
+          title: `Account Changed To ${accounts[0]}`,
+          content: "The page will refresh in 3 seconds"
         })
         setSelectedAddress(accounts[0])
       } else {
         Notification.info({
           title: 'No wallet address available',
-          content: `Please log in again.`
+          content: "The page will refresh in 3 seconds"
         })
         setSelectedAddress(undefined)
       }
+      setTimeout(() => window.location.reload(), 3000)
     })
 
     window.ethereum.on('chainChanged', () => {

@@ -1,4 +1,4 @@
-import { Button, Message } from '@arco-design/web-react'
+import { Button, Modal } from '@arco-design/web-react'
 import { useRequest } from 'ahooks'
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 import { useAuthedRedirect } from '@/hooks/useAuthedRedirect'
@@ -16,8 +16,14 @@ const NoWalletDetected = () => {
   }, {
     manual: true,
     onSuccess: authedRedirect,
-    onError (e) {
-      Message.error(e.message)
+    onError () {
+      setTimeout(() => window.location.reload(), 3000)
+      Modal.warning({
+        title: 'An error occurred, Please refresh the page.',
+        content: 'You can manually refresh the page or wait 3 seconds for the page to refresh automatically.',
+        okText: 'Refresh',
+        onOk: () => window.location.reload()
+      })
     }
   })
 
