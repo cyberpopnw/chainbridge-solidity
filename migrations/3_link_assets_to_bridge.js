@@ -59,4 +59,4 @@ module.exports = async function (deployer, network, accounts) {
       badge: badge.address,
     }, undefined, 2)
   );
-
+}
