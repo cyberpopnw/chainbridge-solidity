@@ -8,6 +8,7 @@ export type StepItemProps = {
 export type NFTItem = {
   id: number;
   standard: string;
+  address?: string;
   amount?: number;
   name?: string;
   image?: string;

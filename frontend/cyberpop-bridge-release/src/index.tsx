@@ -2,6 +2,10 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import GlobalStateProvider from '@/globalStateContent'
 
+// Arco i18n
+import { ConfigProvider } from '@arco-design/web-react';
+import enUS from '@arco-design/web-react/es/locale/en-US';
+
 // Route Component
 import Home from '@/page/home'
 import Bridge from '@/page/bridge'
@@ -16,18 +20,20 @@ import { Main } from '@/layout/main'
 
 ReactDOM.render(
   <BrowserRouter>
-    <GlobalStateProvider>
-      <Main>
-        <Routes>
-          <Route path="/" element={<Home/>}/>
-          <Route path="/bridge" element={<Bridge/>} />
-          <Route path="/erc20-cyt" element={<CYT/>} />
-          <Route path="/loan" element={<Loan />} />
-          <Route path="/connect-wallet" element={<ConnectWallet />} />
-          <Route path="/no-wallet-detected" element={<NoWalletDetected />} />
-        </Routes>
-      </Main>
-    </GlobalStateProvider>
+    <ConfigProvider locale={enUS}>
+      <GlobalStateProvider>
+        <Main>
+          <Routes>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/bridge" element={<Bridge/>} />
+            <Route path="/erc20-cyt" element={<CYT/>} />
+            <Route path="/loan" element={<Loan />} />
+            <Route path="/connect-wallet" element={<ConnectWallet />} />
+            <Route path="/no-wallet-detected" element={<NoWalletDetected />} />
+          </Routes>
+        </Main>
+      </GlobalStateProvider>
+    </ConfigProvider>
   </BrowserRouter>,
   document.getElementById('root')
 )

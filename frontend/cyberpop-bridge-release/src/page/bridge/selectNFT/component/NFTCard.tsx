@@ -1,16 +1,28 @@
-import { Checkbox, Form, Input, Tag, InputNumber } from '@arco-design/web-react'
+import { Checkbox, Form, Input, Tag, InputNumber, Tooltip, Typography } from '@arco-design/web-react'
 import { IconCheck } from '@arco-design/web-react/icon'
 import Img from '@/component/Image'
 
 import type { FC } from 'react'
 import type { NFTItem } from '@/page/bridge/selectNFT/type'
 
-const StandardTag: FC<Pick<NFTItem, 'standard'>> = ({ standard }) => {
+const StandardTag: FC<Pick<NFTItem, 'standard'> & { contractAddress?: string }> = ({ standard, contractAddress }) => {
   const enumValue: Record<string, string> = {
     'ERC721': 'purple',
     'ERC1155': 'magenta'
   }
-  return <Tag className="nft-standard-tag" color={enumValue[standard] || ''}>{ standard }</Tag>
+
+  const content = (
+    <>
+      <Typography.Text bold style={{ color: "#FFFFFF", marginBottom: 0 }}>Contract Address: </Typography.Text>
+      <Typography.Text copyable style={{ color: "#FFFFFF", marginBottom: 0 }}>{contractAddress}</Typography.Text>
+    </>
+  )
+
+  return (
+    <Tooltip position="tl" content={content}>
+      <Tag color={enumValue[standard]} className="nft-standard-tag">{ standard }</Tag>
+    </Tooltip>
+  )
 }
 
 
@@ -28,7 +40,7 @@ export const NFTCard: FC<{
         <Checkbox key={NFTItem.name} value={NFTItem.name} className="nft-card__checkbox">
           {({ checked }: { checked: boolean }) => (
             <div className={`${checked ? 'nft-card__checkbox--checked' : ''}`}>
-              <StandardTag standard={NFTItem.standard} />
+              <StandardTag standard={NFTItem.standard} contractAddress={NFTItem.address} />
               <div className="nft-card__checkbox__dot">
                 <IconCheck />
               </div>
