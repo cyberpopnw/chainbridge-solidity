@@ -1,7 +1,10 @@
-import { Button, Modal } from '@arco-design/web-react'
+import { Button, Modal, Message } from '@arco-design/web-react'
+
 import { useRequest } from 'ahooks'
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 import { useAuthedRedirect } from '@/hooks/useAuthedRedirect'
+
+import type { MetaMaskError } from '@/types/metamaskError'
 
 import '@/scss/exceptionPage.scss';
 
@@ -14,9 +17,13 @@ const NoWalletDetected = () => {
       message: 'connect wallet function is not defined.'
     })
   }, {
-    manual: true,
     onSuccess: authedRedirect,
-    onError () {
+    onError (e) {
+      const { code } = e as unknown as MetaMaskError
+      if (code === 4001) {
+        Message.warning(e.message)
+        return
+      }
       setTimeout(() => window.location.reload(), 3000)
       Modal.warning({
         title: 'An error occurred, Please refresh the page.',
