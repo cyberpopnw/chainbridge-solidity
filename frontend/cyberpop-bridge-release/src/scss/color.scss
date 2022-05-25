@@ -1,6 +1,11 @@
 $color-primary: #04FFA2;
 $color-primary-2: #2D5CF6;
 $color-white: #FFFFFF;
+$color-secondary: rgba(255, 255, 255, .2);
+
+.color-primary {
+  color: $color-primary;
+}
 
 .color-white {
   color: $color-white;

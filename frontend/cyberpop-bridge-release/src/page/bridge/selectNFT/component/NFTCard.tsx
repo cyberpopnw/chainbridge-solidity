@@ -50,7 +50,11 @@ export const NFTCard: FC<{
                   src={NFTItem.image}
                   preview={false}
                 />
-                <span className="nft-card__meta__amount">x{NFTItem.amount}</span>
+                {
+                  NFTItem.standard !== 'ERC721' && (
+                    <span className="nft-card__meta__amount">x{NFTItem.amount}</span>
+                  )
+                }
                 <p className="nft-card__meta__name">{NFTItem.name}</p>
               </div>
             </div>

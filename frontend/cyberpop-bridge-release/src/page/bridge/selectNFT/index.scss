@@ -1,3 +1,18 @@
+@import "src/scss/color";
+
+.no-nft-available {
+  grid-column-start: 1;
+  grid-column-end: 4;
+  font-size: 3rem;
+  text-align: center;
+  color: $color-primary;
+  margin: 0;
+}
+
+.divider {
+  border-bottom: 2px solid $color-secondary;
+}
+
 .nft-select__wrapper {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 330px));

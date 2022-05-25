@@ -7,7 +7,7 @@ export type StepItemProps = {
 
 export type NFTItem = {
   id: number;
-  standard: string;
+  standard: 'ERC721' | 'ERC1155';
   address?: string;
   amount?: number;
   name?: string;

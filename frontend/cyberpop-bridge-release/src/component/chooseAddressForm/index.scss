@@ -1,3 +1,5 @@
+@import "src/scss/color";
+
 .choose-address-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -78,15 +80,6 @@
     width: 2rem;
     margin-right: 1rem;
   }
-}
-
-.no-nft-available {
-  grid-column-start: 1;
-  grid-column-end: 4;
-  font-size: 3rem;
-  text-align: center;
-  color: $color-primary;
-  margin: 0;
 }
 
 .target-address__button {

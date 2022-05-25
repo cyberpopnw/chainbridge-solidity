@@ -1,6 +1,5 @@
 import { Form, Message, Steps } from '@arco-design/web-react'
 import { SelectNFT } from '@/page/bridge/selectNFT'
-import ChooseAddressForm from '@/component/chooseAddressForm'
 
 import { useState } from 'react'
 import { useRequest } from 'ahooks'
@@ -14,6 +13,7 @@ import { switchChain } from '@/lib/metamask'
 import type { FC } from 'react'
 
 import '@/page/bridge/index.scss'
+import TransferTo from '@/page/bridge/TransferTo'
 
 type FormValue = {
   sourceAddress: string;
@@ -34,14 +34,10 @@ const { Step } = Steps
 
 const stepTitle = {
   1: {
-    title: 'Step 1: Choose Address',
+    title: 'Step 1: Select NFT',
   },
   2: {
-    title: 'Step 2: Select NFT',
-    disabledText: 'Select an NFT to transfer through NFT Bridge'
-  },
-  3: {
-    title: 'Step 3: Transfer NFT',
+    title: 'Step 2: Transfer To',
     disabledText: 'Transfer NFT through Bridge'
   }
 }
@@ -137,7 +133,11 @@ const Bridge = () => {
         <Steps className="step__wrapper" current={currentStep} direction="vertical" lineless>
           <Step
             title={stepTitle[1].title}
-            description={<StepContent><ChooseAddressForm form={formInstance} switchStep={switchStep(2)}/></StepContent>}
+            description={(
+              <StepContent>
+                <SelectNFT form={formInstance} switchStep={switchStep(2)} />
+              </StepContent>
+            )}
           />
           <Step
             title={stepTitle[2].title}
@@ -146,7 +146,7 @@ const Bridge = () => {
                 disabled={currentStep !== 2 && !completedSteps.includes(2)}
                 disabledText={stepTitle[2].disabledText}
               >
-                <SelectNFT form={formInstance} loading={loading} />
+                <TransferTo form={formInstance} loading={loading} />
               </StepContent>
             }
           />
