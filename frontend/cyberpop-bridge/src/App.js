@@ -6,6 +6,7 @@ import BridgeArtifact from "./contracts/Bridge.json";
 import ERC20Artifact from "./contracts/ERC20.json";
 import ERC721Artifact from "./contracts/ERC721.json";
 import ERC1155Artifact from "./contracts/ERC1155.json";
+import EasyStaking from "./contracts/EasyStaking.json";
 
 import { ethers } from "ethers"
 import { Link, Route } from "wouter"
@@ -42,6 +43,8 @@ function App() {
   const [cyt, setCYT] = useState(null)
   const [cyborg, setCyborg] = useState(null)
   const [badge, setBadge] = useState(null)
+  const [easyStaking, setEasyStaking] = useState(null)
+  const [stakeToken, setStakeToken] = useState(null)
   const [provider, setProvider] = useState(null)
 
   useEffect(() => {
@@ -77,6 +80,21 @@ function App() {
         _provider.getSigner(0)
       )
       setBadge(b)
+
+      b = new ethers.Contract(
+        assetsAddress.easyStaking,
+        EasyStaking.abi,
+        _provider.getSigner(0)
+      )
+      setEasyStaking(b)
+
+      b = new ethers.Contract(
+        assetsAddress.stakeToken,
+        ERC20Artifact.abi,
+        _provider.getSigner(0)
+      )
+      setStakeToken(b)
+
     }
     update()
   }, [network, selectedAddress])
@@ -209,7 +227,7 @@ function App() {
               <Status api="http://localhost:8090" />
             </Route>
             <Route path="/staking">
-              <Staking cyt={erc20} easyStaking />
+              <Staking cyt={stakeToken} easyStaking={easyStaking} />
             </Route>
           </div>
         </div>
