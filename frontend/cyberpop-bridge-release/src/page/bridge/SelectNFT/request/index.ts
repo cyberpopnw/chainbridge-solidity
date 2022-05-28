@@ -5,7 +5,7 @@ import { ERC1155TokenList } from '@/lib/ERC1155TokenList'
 
 import type { Contract } from 'ethers'
 import type { GlobalState } from '@/globalStateContent/globalState'
-import type { NFTItem } from '@/page/bridge/selectNFT/type'
+import type { NFTItem } from '@/page/bridge/SelectNFT/type'
 
 /*
  * contracts[0]: ERC721
@@ -36,9 +36,9 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
           ERC1155TokenList
         )
 
-        for (let i = 0; i < ERC1155TokenList.length; i++) {
+        for (let i = 0; balances?.length && i < ERC1155TokenList.length; i++) {
           // results with a number of zero are excluded
-          const balance = BigNumber.from(balances[i] || 0).toNumber()
+          const balance = BigNumber.from(balances[i]).toNumber()
           if (!balance) continue
 
           const id = ERC1155TokenList[i]

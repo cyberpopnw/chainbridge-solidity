@@ -1,8 +1,5 @@
-import type { FormInstance } from '@arco-design/web-react'
-
 export type StepItemProps = {
   switchStep?: () => void;
-  form: FormInstance
 }
 
 export type NFTItem = {
@@ -12,4 +9,11 @@ export type NFTItem = {
   amount?: number;
   name?: string;
   image?: string;
+}
+
+export type FormValues = {
+  sourceChain: number | 'unknown';
+  sourceAddress: string;
+  selectedNFTIndex: number;
+  amount?: number;
 }

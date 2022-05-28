@@ -1,5 +1,7 @@
 import { Form, Message, Steps } from '@arco-design/web-react'
-import { SelectNFT } from '@/page/bridge/selectNFT'
+import SelectNFT from '@/page/bridge/SelectNFT'
+import TransferTo from '@/page/bridge/TransferTo'
+
 
 import { useState } from 'react'
 import { useRequest } from 'ahooks'
@@ -7,27 +9,24 @@ import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 import { useCyborgDeposit } from '@/hooks/useCyborgDeposit'
 import { useBadgeDeposit } from '@/hooks/useBadgeDeposit'
 
+import { getTokenURIs } from '@/page/bridge/SelectNFT/request'
 import { getChain } from '@/lib/chainIds'
-import { switchChain } from '@/lib/metamask'
 
 import type { FC } from 'react'
+import type { NFTItem } from '@/page/bridge/SelectNFT/type'
+import type { FormValues as SelectNFTFormValues } from '@/page/bridge/SelectNFT/type'
+import type { FormValues as TransferToFormValues } from '@/page/bridge/TransferTo/type'
 
 import '@/page/bridge/index.scss'
-import TransferTo from '@/page/bridge/TransferTo'
+import ProgressModal from '@/page/bridge/ProgressModal'
 
-type FormValue = {
-  sourceAddress: string;
-  sourceChain: number | 'unknown';
-  targetAddress: string;
-  targetChain: number;
-  'nft-select': {
-    selected: boolean;
-    amount?: number;
-    meta: {
-      standard: string;
-      id?: unknown;
-    }
-  }[]
+
+type DepositValues = {
+  targetChain: TransferToFormValues['targetChain'],
+  targetAddress: TransferToFormValues['targetAddress'],
+  standard: NFTItem['standard'],
+  id: NFTItem['id'],
+  amount: SelectNFTFormValues['amount']
 }
 
 const { Step } = Steps
@@ -58,10 +57,11 @@ const StepContent: FC<{
 }
 
 const Bridge = () => {
-  const { network } = useGlobalStateContext()
+  const { cyborg, badge, selectedAddress } = useGlobalStateContext()
   const [currentStep, setCurrentStep] = useState(1)
   const [completedSteps, setCompletedSteps] = useState([1])
-  const [formInstance] = Form.useForm()
+  const [progressModalVisible, setProgressModalVisible] = useState(false)
+
   const cyborgDeposit = useCyborgDeposit()
   const badgeDeposit = useBadgeDeposit()
 
@@ -70,34 +70,24 @@ const Bridge = () => {
     setCompletedSteps(old => [...old, nextStepIndex - 1])
   }
 
-  const { run: deposit, loading } = useRequest<any, [FormValue]>(value => {
-    if (value.sourceChain === 'unknown') {
-      return Promise.reject({ message: 'SourceChain cannot be unknown' })
-    }
+  const { data, loading: requestDataLoading } = useRequest<NFTItem[], any>(
+    async () => getTokenURIs([cyborg, badge], selectedAddress || '')
+  )
 
-    const _value = {
-      ...value,
-      sourceChain: getChain(value.sourceChain)?.bridgeId,
-      targetChain: getChain(value.targetChain)?.bridgeId,
-      selectedNFT: value['nft-select'].find(nft => nft.selected)
-    }
-
-    // TODO: change field validate
-    if (!_value.selectedNFT) {
-      return Promise.reject('Selected NFT not found, Please check.')
-    }
-
-    switch (_value.selectedNFT.meta.standard) {
+  const { run: deposit, loading: depositLoading, error } = useRequest<any, [DepositValues]>(value => {
+    setProgressModalVisible(true)
+    switch (value.standard) {
       case 'ERC721':
-        return cyborgDeposit(_value.targetChain, _value.targetAddress, _value.selectedNFT.meta.id)
+        return cyborgDeposit(value.targetChain, value.targetAddress, value.id)
       case 'ERC1155':
-        return badgeDeposit(_value.targetChain, _value.targetAddress, _value.selectedNFT.meta.id, _value.selectedNFT.amount || 0)
+        return badgeDeposit(value.targetChain, value.targetAddress, value.id, value.amount as number)
       default:
         return Promise.reject('Not found match deposit function.')
     }
   }, {
     manual: true,
-    onSuccess () {
+    onSuccess (res) {
+      console.log('transaction result -->', res)
       Message.success('Contract Active')
     },
     onError (e) {
@@ -111,31 +101,41 @@ const Bridge = () => {
       <div className="text-center">
         <h1 className="page-primary-title">Cross Chain NFT Bridge</h1>
       </div>
-      <Form
-        scrollToFirstError
-        form={formInstance}
-        labelCol={{ span: 0 }}
-        layout="vertical"
-        autoComplete="off"
-        onValuesChange={value => {
-          const chainId = network?.chainId
-          const { sourceChain } = value
-          if (chainId && sourceChain && chainId !== sourceChain && sourceChain !== 'unknown') {
-            switchChain(sourceChain)
-              .catch(e => {
-                Message.error(e.message)
-                formInstance.setFieldValue('sourceChain', getChain(network?.chainId)?.chainId|| 'unknown')
+      <Form.Provider
+        onFormSubmit={(formId, __ , { forms, }) => {
+          if (!data?.length) {
+            Message.error('No NFT available')
+            return
+          }
+          if (formId === 'transferTo') {
+            return Promise.all([
+              forms['selectNFT']?.validate(),
+              forms['transferTo']?.validate()
+            ]).then(() => {
+              const value = {
+                ...forms['selectNFT']?.getFieldsValue(),
+                ...forms['transferTo']?.getFieldsValue()
+              } as SelectNFTFormValues & TransferToFormValues
+
+              const selectedNFT = data[value.selectedNFTIndex]
+
+              return deposit({
+                targetChain: getChain(value.targetChain)?.bridgeId as number,
+                targetAddress: value.targetAddress,
+                standard: selectedNFT.standard,
+                id: selectedNFT.id,
+                amount: value.amount
               })
+            }).catch(() => { Message.error('Field validation exception') })
           }
         }}
-        onSubmit={deposit}
       >
         <Steps className="step__wrapper" current={currentStep} direction="vertical" lineless>
           <Step
             title={stepTitle[1].title}
             description={(
               <StepContent>
-                <SelectNFT form={formInstance} switchStep={switchStep(2)} />
+                <SelectNFT switchStep={switchStep(2)} data={data} dataLoading={requestDataLoading} />
               </StepContent>
             )}
           />
@@ -146,12 +146,21 @@ const Bridge = () => {
                 disabled={currentStep !== 2 && !completedSteps.includes(2)}
                 disabledText={stepTitle[2].disabledText}
               >
-                <TransferTo form={formInstance} loading={loading} />
+                <TransferTo loading={depositLoading} />
               </StepContent>
             }
           />
         </Steps>
-      </Form>
+      </Form.Provider>
+      <ProgressModal
+        loading={depositLoading}
+        result={{
+          success: !error,
+          errorMessage: error?.message
+        }}
+        visible={progressModalVisible}
+        onCancel={() => setProgressModalVisible(false)}
+      />
     </>
   )
 }
