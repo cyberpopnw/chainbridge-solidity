@@ -17,8 +17,8 @@ const NFTCard: FC<{
     <div className="nft-card">
       <Radio value={index} className="nft-card__radio">
         {({ checked }: { checked: boolean }) => (
-          <>
-            <StandardTag standard={NFTItem.standard} contractAddress={NFTItem.address}/>
+          <div onClick={() => formInstance.setFieldValue('selectedNFTIndex', undefined)}>
+            <StandardTag standard={NFTItem.standard} contractAddress={NFTItem.address} id={NFTItem.id} />
             <div className={`nft-card__radio__dot ${checked ? 'nft-card__radio__dot--checked' : ''}`}>
               <IconCheck/>
             </div>
@@ -37,7 +37,7 @@ const NFTCard: FC<{
                 )
               }
             </div>
-          </>
+          </div>
         )}
       </Radio>
       <Form.Item shouldUpdate>

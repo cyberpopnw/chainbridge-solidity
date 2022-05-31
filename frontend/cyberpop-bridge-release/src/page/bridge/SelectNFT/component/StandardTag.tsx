@@ -1,4 +1,5 @@
-import { Tag, Tooltip, Typography } from '@arco-design/web-react'
+import { Tag, Tooltip, Typography, Space } from '@arco-design/web-react'
+import styled from 'styled-components'
 
 import type { FC } from 'react'
 import type { NFTItem } from '@/page/bridge/SelectNFT/type'
@@ -6,20 +7,30 @@ import type { NFTItem } from '@/page/bridge/SelectNFT/type'
 import '@/page/bridge/index.scss'
 
 type Props = {
-  contractAddress?: string
+  contractAddress?: string;
+  id?: number;
 } & Pick<NFTItem, 'standard'>
 
-const StandardTag: FC<Props> = ({ standard, contractAddress }) => {
+const TypographyText = styled(Typography.Text)`
+  color: #FFFFFF;
+  margin-bottom: 0;
+`
+
+const StandardTag: FC<Props> = ({ standard, contractAddress, id }) => {
   const enumValue: Record<string, string> = {
     'ERC721': 'purple',
     'ERC1155': 'magenta'
   }
 
   const content = (
-    <>
-      <Typography.Text bold style={{ color: "#FFFFFF", marginBottom: 0 }}>Contract Address: </Typography.Text>
-      <Typography.Text copyable style={{ color: "#FFFFFF", marginBottom: 0 }}>{contractAddress}</Typography.Text>
-    </>
+    <div>
+      <div>
+        <TypographyText bold>Contract Address: </TypographyText>
+        <TypographyText copyable>{contractAddress}</TypographyText>
+      </div>
+      <Space size="mini" />
+      <TypographyText >ID: {id}</TypographyText>
+    </div>
   )
 
   return (
