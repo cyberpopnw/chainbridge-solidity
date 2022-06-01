@@ -18,10 +18,10 @@ import type { StepItemProps, NFTItem } from '@/page/bridge/SelectNFT/type'
 
 type Props = {
   data?: NFTItem[];
-  dataLoading?: boolean;
+  loading?: boolean;
 } & StepItemProps
 
-const SelectNFT: FC<Props> = ({ switchStep, data }) => {
+const SelectNFT: FC<Props> = ({ switchStep, data, loading }) => {
   const { selectedAddress, network } = useGlobalStateContext()
   const [isValidate, setIsValidate] = useState(true)
   const [formInstance] = Form.useForm()
@@ -89,7 +89,7 @@ const SelectNFT: FC<Props> = ({ switchStep, data }) => {
         </Form.Item>
       </div>
       <div className="nft-select__wrapper">
-        <Spin loading={false} size={40}>
+        <Spin loading={loading} size={40}>
           <h3 className="nft-select__title">
             {data?.length ? 'Select NFT' : 'No NFT available'}
           </h3>
@@ -98,9 +98,11 @@ const SelectNFT: FC<Props> = ({ switchStep, data }) => {
               <Grid.Row gutter={[50, 30]} align="center">
                 {
                   data?.map((NFTItem, index) => (
-                    <Grid.Col span={8} key={NFTItem.standard + NFTItem.id}>
-                      <NFTCard index={index} NFTItem={NFTItem} formInstance={formInstance}/>
-                    </Grid.Col>
+                    NFTItem && (
+                      <Grid.Col span={8} key={NFTItem?.standard + NFTItem?.id}>
+                        <NFTCard index={index} NFTItem={NFTItem} formInstance={formInstance}/>
+                      </Grid.Col>
+                    )
                   ))
                 }
               </Grid.Row>

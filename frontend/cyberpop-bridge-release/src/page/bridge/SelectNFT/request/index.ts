@@ -19,8 +19,9 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
           const metaData = await contracts[0]?.tokenURI(ERC721Token).then((uri: string) => (
             axios.get(uri).then(res => res.data)
           ))
+
           return Promise.resolve({
-            id: ERC721Token,
+            id: BigNumber.isBigNumber(ERC721Token) ? BigNumber.from(ERC721Token).toNumber() : ERC721Token,
             standard: 'ERC721',
             amount: 1,
             address: contracts[0]?.address,
@@ -45,8 +46,9 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
           const id = ERC1155TokenList[i]
           const baseURI = await contracts[1]?.uri(id)
           const { data: metaData } = await axios.get(baseURI)
+
           result.push({
-            id,
+            id: BigNumber.isBigNumber(id) ? BigNumber.from(id).toNumber() : id,
             amount: balance,
             standard: 'ERC1155',
             address: contracts[0]?.address,

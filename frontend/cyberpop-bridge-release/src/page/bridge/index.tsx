@@ -71,7 +71,10 @@ const Bridge = () => {
   }
 
   const { data, loading: requestDataLoading } = useRequest<NFTItem[], any>(
-    async () => getTokenURIs([cyborg, badge], selectedAddress || '')
+    async () => getTokenURIs([cyborg, badge], selectedAddress || ''),
+    {
+      refreshDeps: [cyborg, badge]
+    }
   )
 
   const { run: deposit, loading: depositLoading, error } = useRequest<any, [DepositValues]>(value => {
@@ -102,7 +105,7 @@ const Bridge = () => {
         <h1 className="page-primary-title">Cross Chain NFT Bridge</h1>
       </div>
       <Form.Provider
-        onFormSubmit={(formId, __ , { forms, }) => {
+        onFormSubmit={(formId, __, { forms, }) => {
           if (!data?.length) {
             Message.error('No NFT available')
             return
@@ -126,7 +129,9 @@ const Bridge = () => {
                 id: selectedNFT.id,
                 amount: value.amount
               })
-            }).catch(() => { Message.error('Field validation exception') })
+            }).catch(() => {
+              Message.error('Field validation exception')
+            })
           }
         }}
       >
@@ -135,7 +140,7 @@ const Bridge = () => {
             title={stepTitle[1].title}
             description={(
               <StepContent>
-                <SelectNFT switchStep={switchStep(2)} data={data} dataLoading={requestDataLoading} />
+                <SelectNFT switchStep={switchStep(2)} data={data} loading={requestDataLoading}/>
               </StepContent>
             )}
           />
@@ -146,7 +151,7 @@ const Bridge = () => {
                 disabled={currentStep !== 2 && !completedSteps.includes(2)}
                 disabledText={stepTitle[2].disabledText}
               >
-                <TransferTo loading={depositLoading} />
+                <TransferTo loading={depositLoading}/>
               </StepContent>
             }
           />
