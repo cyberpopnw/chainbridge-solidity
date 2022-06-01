@@ -23,6 +23,7 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
             id: ERC721Token,
             standard: 'ERC721',
             amount: 1,
+            address: contracts[0]?.address,
             ...metaData
           })
         })))
@@ -43,11 +44,12 @@ export const getTokenURIs = (contracts: (Contract | undefined)[], selectedAddres
 
           const id = ERC1155TokenList[i]
           const baseURI = await contracts[1]?.uri(id)
-          const { data: metaData } = await axios.get(baseURI + id)
+          const { data: metaData } = await axios.get(baseURI)
           result.push({
             id,
             amount: balance,
             standard: 'ERC1155',
+            address: contracts[0]?.address,
             ...metaData
           })
         }
