@@ -1,7 +1,7 @@
 import { Form, Message, Steps } from '@arco-design/web-react'
 import SelectNFT from '@/page/bridge/SelectNFT'
 import TransferTo from '@/page/bridge/TransferTo'
-
+import ProgressModal from '@/page/bridge/ProgressModal'
 
 import { useState } from 'react'
 import { useRequest } from 'ahooks'
@@ -18,8 +18,6 @@ import type { FormValues as SelectNFTFormValues } from '@/page/bridge/SelectNFT/
 import type { FormValues as TransferToFormValues } from '@/page/bridge/TransferTo/type'
 
 import '@/page/bridge/index.scss'
-import ProgressModal from '@/page/bridge/ProgressModal'
-
 
 type DepositValues = {
   targetChain: TransferToFormValues['targetChain'],

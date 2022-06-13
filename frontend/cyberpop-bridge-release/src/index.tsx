@@ -11,6 +11,7 @@ import Home from '@/page/home'
 import Bridge from '@/page/bridge'
 // import CYT from '@/page/cyt'
 import Loan from '@/page/loan'
+import Log from '@/page/log'
 import ConnectWallet from '@/page/connectWallet'
 import NoWalletDetected from '@/page/noWalletDetected'
 
@@ -28,6 +29,7 @@ ReactDOM.render(
             <Route path="/bridge" element={<Bridge/>} />
             {/*<Route path="/erc20-cyt" element={<CYT/>} />*/}
             <Route path="/loan" element={<Loan />} />
+            <Route path="/log" element={<Log />} />
             <Route path="/connect-wallet" element={<ConnectWallet />} />
             <Route path="/no-wallet-detected" element={<NoWalletDetected />} />
           </Routes>
@@ -37,3 +39,5 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById('root')
 )
+
+document.body.setAttribute('arco-theme', 'dark');

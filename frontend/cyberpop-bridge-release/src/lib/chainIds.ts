@@ -41,11 +41,11 @@ const chainIds: Record<string, Chain> = {
   }
 }
 
-export const getChain = (chainId?: Chain['chainId']) => {
-  if (!chainId) return
+export const getChain = (value?: unknown, key?: keyof Chain) => {
+  if (value == null) return
   let result
   for (let chain in chainIds) {
-    if (chainId === chainIds[chain].chainId) {
+    if (value === chainIds[chain][key || 'chainId']) {
       result = chainIds[chain]
       break
     }
