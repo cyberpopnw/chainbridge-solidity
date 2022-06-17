@@ -1,3 +1,21 @@
 .m-0 {
   margin: 0 !important;
 }
+
+.p-0 {
+  padding: 0 !important;
+}
+
+.children-m-0 {
+  > * {
+    margin: 0 !important;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}

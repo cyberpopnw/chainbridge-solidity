@@ -1,0 +1,81 @@
+@import "src/scss/color";
+@import "src/scss/utils";
+
+.divide {
+  margin: 2rem 0;
+}
+
+.label {
+  color: $color-white;
+  font-weight: 500;
+  font-size: 2rem;
+}
+
+.description {
+  color: $color-white;
+  font-size: 2rem;
+}
+
+.select {
+  height: 100%;
+  min-width: 30rem;
+
+  .arco-select-view {
+    height: inherit !important;
+  }
+
+  .arco-select-view .arco-select-view-value {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.input-wrapper {
+  background-color: $color-gray;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-row-gap: 2rem;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem;
+
+  .label {
+    font-size: 1.75rem;
+  }
+
+  .balance {
+    font-size: 1.75rem;
+  }
+
+  .input {
+    .arco-input-inner-wrapper {
+      padding: 1rem;
+    }
+
+    .arco-input {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  }
+
+  .arco-form-message {
+    font-size: 1.75rem;
+  }
+
+  .auto-complete {
+    max-width: 35rem;
+    padding: 0;
+    margin-top: 1rem;
+  }
+
+  .cyt-icon {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .wallet-icon {
+    width: 2rem;
+    height: 3rem;
+  }
+}

@@ -9,7 +9,7 @@ import enUS from '@arco-design/web-react/es/locale/en-US';
 // Route Component
 import Home from '@/page/home'
 import Bridge from '@/page/bridge'
-// import CYT from '@/page/cyt'
+import ERC20Bridge from '@/page/erc20Bridge'
 import Loan from '@/page/loan'
 import Log from '@/page/log'
 import ConnectWallet from '@/page/connectWallet'
@@ -27,7 +27,7 @@ ReactDOM.render(
           <Routes>
             <Route path="/" element={<Home/>}/>
             <Route path="/bridge" element={<Bridge/>} />
-            {/*<Route path="/erc20-cyt" element={<CYT/>} />*/}
+            <Route path="/erc20-bridge" element={<ERC20Bridge />} />
             <Route path="/loan" element={<Loan />} />
             <Route path="/log" element={<Log />} />
             <Route path="/connect-wallet" element={<ConnectWallet />} />

@@ -1,7 +1,7 @@
 import { Form, Message, Steps } from '@arco-design/web-react'
 import SelectNFT from '@/page/bridge/SelectNFT'
 import TransferTo from '@/page/bridge/TransferTo'
-import ProgressModal from '@/page/bridge/ProgressModal'
+import ProgressModal from '@/component/ProgressModal'
 
 import { useState } from 'react'
 import { useRequest } from 'ahooks'
