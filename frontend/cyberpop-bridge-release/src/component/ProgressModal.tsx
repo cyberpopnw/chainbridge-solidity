@@ -36,14 +36,19 @@ const ProgressModal: FC<Props> = ({ loading, result, ...ModalProps }) => {
       autoFocus
       focusLock
       footer={null}
+      closable={!loading}
       {...ModalProps}
     >
       <Result
-        status={'error'}
+        status={loading ? 'info' : ( result.success ? 'success' : 'error' )}
         title={loading ? resultProps.title.loading : (result.success ? resultProps.title.success : resultProps.title.failed)}
         subTitle={loading ? resultProps.subTitle.loading : (result.success ? resultProps.subTitle.success : result.errorMessage)}
         icon={loading ? resultProps.icon.loading : (result.success ? resultProps.icon.success : resultProps.icon.failed)}
-        extra={<Button disabled={loading} loading={loading} type="primary" href='/log'>View Transaction Log</Button> }
+        extra={
+          !loading && (
+            <Button disabled={loading} loading={loading} type="primary" href='/log'>View Transaction Log</Button>
+          )
+        }
       />
     </Modal>
   )

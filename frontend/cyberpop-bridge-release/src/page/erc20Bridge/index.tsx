@@ -99,14 +99,17 @@ const ERC20Bridge = () => {
             </div>
             <Form.Item field="amount" className="m-0" initialValue={cytBalance && 1} rules={[
               { required: true, message: 'Sending Amount is required.' },
-              { min: cytBalance && 1, message: cytBalance ? 'Sending Amount must be greater than 1' : 'Available balance is insufficient.' },
+              {
+                min: cytBalance && 1,
+                message: cytBalance ? 'Sending Amount must be greater than 1' : 'Available balance is insufficient.'
+              },
               { max: cytBalance, message: `Max available balance is ${cytBalance}` }
             ]}>
               <InputNumber
                 min={cytBalance ? 1 : 0}
                 max={cytBalance}
                 placeholder="Sending Amount"
-                prefix={<CYT className="cyt-icon" />}
+                prefix={<CYT className="cyt-icon"/>}
                 suffix="CYT"
                 className="input"
               />
@@ -118,7 +121,7 @@ const ERC20Bridge = () => {
         </div>
         <div className="divide"/>
         <Divider orientation="center">
-          <FaArrowCircleDown  style={{ width: '5rem', height: '5rem' }}/>
+          <FaArrowCircleDown style={{ width: '5rem', height: '5rem' }}/>
         </Divider>
         <div className="divide"/>
         <div id="destination">
@@ -137,7 +140,7 @@ const ERC20Bridge = () => {
             ]}>
               <Input
                 allowClear
-                prefix={<FaWallet className="wallet-icon" />}
+                prefix={<FaWallet className="wallet-icon"/>}
                 placeholder="Received Address"
                 className="input"
               />

@@ -11,7 +11,8 @@ export const useCyborgDeposit = () => {
     }
 
     const handler = await bridge?._resourceIDToHandlerAddress(process.env.REACT_APP_CyborgResourceID)
-    await waitForTransaction(cyborg?.approve(handler, tokenId))
+
+    await waitForTransaction(await cyborg?.approve(handler, tokenId))
 
     const data = '0x' +
       utils.hexZeroPad(BigNumber.from(tokenId).toHexString(), 32).substring(2) +
