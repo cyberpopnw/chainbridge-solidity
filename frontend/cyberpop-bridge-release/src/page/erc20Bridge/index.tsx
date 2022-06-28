@@ -101,7 +101,7 @@ const ERC20Bridge = () => {
             <Form.Item field="amount" className="m-0" initialValue={cytBalance && 1} rules={[
               { required: true, message: 'Sending Amount is required.' },
               {
-                min: cytBalance && 1,
+                min: 1,
                 message: cytBalance ? 'Sending Amount must be greater than 1' : 'Available balance is insufficient.'
               },
               { max: cytBalance, message: `Max available balance is ${cytBalance}` }
@@ -109,7 +109,7 @@ const ERC20Bridge = () => {
               <InputNumber
                 autoFocus
                 disabled={!cytBalance}
-                min={cytBalance ? 1 : 0}
+                min={1}
                 max={cytBalance}
                 placeholder="Sending Amount"
                 prefix={<CYT className="cyt-icon"/>}
@@ -117,7 +117,7 @@ const ERC20Bridge = () => {
                 className="input"
               />
             </Form.Item>
-            <Button type="outline" className="auto-complete" onClick={
+            <Button type="outline" className="auto-complete" disabled={!cytBalance} onClick={
               () => formInstance.setFieldValue('amount', cytBalance)
             }>Max available balance</Button>
           </div>
