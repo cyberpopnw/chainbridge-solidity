@@ -1,18 +1,11 @@
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 import { utils, BigNumber } from 'ethers'
 import waitForTransaction from '@/utils/waitForTransaction'
-import { getChain } from '@/lib/chainIds'
 
 export const useCytDeposit = () => {
   const { cyt, bridge } = useGlobalStateContext()
 
-  return async (chainId: number | undefined, to: string, amount: number) => {
-    const targetChain = getChain(chainId)
-
-    if (!targetChain) {
-      return Promise.reject({ message: `Unknown Chain ID ${chainId}` })
-    }
-
+  return async (chainId: number, to: string, amount: number) => {
     const handler = await bridge?._resourceIDToHandlerAddress(process.env.REACT_APP_CytResourceID)
     await waitForTransaction(await cyt?.increaseAllowance(handler, amount))
 
@@ -22,7 +15,7 @@ export const useCytDeposit = () => {
       to.substring(2);
 
     return waitForTransaction(
-      await bridge?.deposit(targetChain.bridgeId, process.env.REACT_APP_CytResourceID, data)
+      await bridge?.deposit(chainId, process.env.REACT_APP_CytResourceID, data)
     )
   }
 }

@@ -27,8 +27,6 @@ const DepositsLogTable = () => {
     }
   )
 
-  console.log(getChain(0, 'bridgeId'))
-
   const columns: TableColumnProps<DepositsLog>[] = [
     {
       title: 'No',

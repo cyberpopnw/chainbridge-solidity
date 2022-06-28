@@ -34,16 +34,16 @@ const ERC20Bridge = () => {
         BigNumber.from(res).toNumber()
       ))),
     {
-      refreshDeps: [cyt, selectedAddress]
+      refreshDeps: [cyt, selectedAddress],
     }
   )
 
   const { run: deposit, loading: depositLoading, error } = useRequest<any, [ERC20DepositFormValue]>(values => {
     const destinationChainBridgeID = getChain(values.destinationChain)?.bridgeId
     if (destinationChainBridgeID == null) {
-      return Promise.reject({ message: 'Unknown Destination Chain' })
+      return Promise.reject({ message: `Unknown Destination Chain ${values.destinationChain}` })
     }
-
+    setProgressModalVisible(true)
     return cytDeposit(destinationChainBridgeID, values.receivedAddress, values.amount)
   }, {
     manual: true,
@@ -60,6 +60,7 @@ const ERC20Bridge = () => {
     form: formInstance,
     onSubmit: deposit,
     validateTrigger: 'onBlur',
+    autoComplete: 'off',
     onValuesChange: (value) => {
       // Switch the Metamask chain synchronously when switching the source chain using the form
       const chainId = network?.chainId
@@ -106,6 +107,8 @@ const ERC20Bridge = () => {
               { max: cytBalance, message: `Max available balance is ${cytBalance}` }
             ]}>
               <InputNumber
+                autoFocus
+                disabled={!cytBalance}
                 min={cytBalance ? 1 : 0}
                 max={cytBalance}
                 placeholder="Sending Amount"
