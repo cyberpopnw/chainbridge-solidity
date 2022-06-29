@@ -29,8 +29,6 @@ const GlobalStateProvider: FC = ({ children }) => {
   const location = useLocation()
 
   const initializeContract = useCallback((contract: Network) => {
-    if (!contract) return
-
     setBridge(() => new ethers.Contract(
       contract.bridge,
       BridgeArtifact.abi,
@@ -106,13 +104,21 @@ const GlobalStateProvider: FC = ({ children }) => {
       // load network contract
       setContractAddress(() => import('@/contract-address')
         .then(module => {
-          let contract = module.fuji
+          let contract
+
           switch (network?.chainId) {
             case 80001:
               contract = module.mumbai;
               break;
+            case 56:
+              contract = module.bsc
+              break;
+            default:
+              contract = module.fuji
           }
+
           initializeContract(contract)
+
           return contract
         })
         .catch(() => {

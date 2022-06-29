@@ -37,7 +37,20 @@ const chainIds: Record<string, Chain> = {
     },
     rpcUrls: ["https://api.avax-test.network/ext/bc/C/rpc"],
     blockExplorerUrls: ["https://testnet.snowtrace.io"],
-    logo: "	https://nftrade.com/img/chains/icons/avax.png",
+    logo: "https://nftrade.com/img/chains/icons/avax.png",
+  },
+  "bsc": {
+    chainName: 'Binance Smart Chain',
+    chainId: 56,
+    bridgeId: 2,
+    nativeCurrency: {
+      name: 'BSC',
+      symbol: 'BSC',
+      decimals: 18
+    },
+    rpcUrls: ['https://bsc-dataseed1.defibit.io'],
+    blockExplorerUrls: ['https://bscscan.com/'],
+    logo: 'https://d2cimmz3cflrbm.cloudfront.net/nwhome/BSC.ico'
   }
 }
 
