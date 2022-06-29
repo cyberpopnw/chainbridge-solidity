@@ -39,17 +39,35 @@ const chainIds: Record<string, Chain> = {
     blockExplorerUrls: ["https://testnet.snowtrace.io"],
     logo: "https://nftrade.com/img/chains/icons/avax.png",
   },
-  "bsc": {
-    chainName: 'Binance Smart Chain',
-    chainId: 56,
+  // "bsc": {
+  //   chainName: 'Binance Smart Chain',
+  //   chainId: 56,
+  //   bridgeId: 2,
+  //   nativeCurrency: {
+  //     name: 'BNB',
+  //     symbol: 'BNB',
+  //     decimals: 18
+  //   },
+  //   rpcUrls: ['https://bsc-dataseed1.defibit.io'],
+  //   blockExplorerUrls: ['https://bscscan.com/'],
+  //   logo: 'https://d2cimmz3cflrbm.cloudfront.net/nwhome/BSC.ico'
+  // },
+  "bscTestNet": {
+    chainName: 'Binance Smart Chain TestNet',
+    chainId: 97,
     bridgeId: 2,
     nativeCurrency: {
-      name: 'BSC',
-      symbol: 'BSC',
+      name: 'tBNB',
+      symbol: 'tBNB',
       decimals: 18
     },
-    rpcUrls: ['https://bsc-dataseed1.defibit.io'],
-    blockExplorerUrls: ['https://bscscan.com/'],
+    rpcUrls: [
+      'https://data-seed-prebsc-1-s1.binance.org:8545',
+      'https://data-seed-prebsc-1-s2.binance.org:8545',
+      'https://data-seed-prebsc-2-s2.binance.org:8545',
+      'https://data-seed-prebsc-2-s3.binance.org:8545'
+    ],
+    blockExplorerUrls: ['https://testnet.bscscan.com/'],
     logo: 'https://d2cimmz3cflrbm.cloudfront.net/nwhome/BSC.ico'
   }
 }

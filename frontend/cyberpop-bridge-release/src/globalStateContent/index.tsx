@@ -110,8 +110,11 @@ const GlobalStateProvider: FC = ({ children }) => {
             case 80001:
               contract = module.mumbai;
               break;
-            case 56:
-              contract = module.bsc
+            // case 56:
+            //   contract = module.bsc
+            //   break;
+            case 97:
+              contract = module.bscTestNet
               break;
             default:
               contract = module.fuji
@@ -150,4 +153,3 @@ const GlobalStateProvider: FC = ({ children }) => {
 }
 
 export default GlobalStateProvider
-

@@ -9,7 +9,7 @@ export type Network = {
   badge: string;
 }
 
-export const fuji = {
+export const fuji: Network = {
   network: "fuji",
   bridge: "0x158A9b46eD1D49eeECf688fD84e354804d4fC948",
   erc20handler: "0x45A0964978c18D9AC4a0ec97357B3DB346Cb088B",
@@ -20,7 +20,7 @@ export const fuji = {
   badge: "0x586eba6be3ffc2499df154aef81b6d3a342c8e34"
 }
 
-export const mumbai = {
+export const mumbai: Network = {
   network: "mumbai",
   bridge: "0x8c909a2271dA2Ea7FaF3ffC2C48899bc41b1A771",
   erc20handler: "0xcDBD08292960dFe402968dd28A2DD1E3edd05CE9",
@@ -31,7 +31,7 @@ export const mumbai = {
   badge: "0x11B79f28B9EEED3cdF2a1A6e6264356F2f70f66A"
 }
 
-export const bsc: Network = {
+export const bscTestNet: Network = {
   network: 'bsc',
   bridge: '0xC44885950D90F0446F891aa30156588F6DB15fEE',
   cyborg: '0x1D2F66E7E2eCCEC8F532Ac995664d1d0EB6Fc420',
