@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { useRequest } from 'ahooks'
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 
-import { getDepositLog } from '@/page/log/request'
+import { getDepositLog } from '@/page/history/request'
 
 import type { TableProps, TableColumnProps } from '@arco-design/web-react'
-import type { DepositsLog } from '@/page/log/type'
+import type { DepositsLog } from '@/page/history/type'
 import type { Pagination } from '@/types/Pagination'
 import { getChain } from '@/lib/chainIds'
 import ChainTag from '@/component/ChainTag'

@@ -1,0 +1,30 @@
+@import 'src/scss/color';
+
+.home {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("~@/assets/images/background.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.primary-title {
+  color: $color-white;
+  font-size: 5rem;
+  margin-bottom: 2rem;
+}
+
+.secondary-title {
+  color: $color-primary;
+  font-size: 3rem;
+}
+
+.transparent-title {
+  max-width: 70%;
+  max-height: 100%;
+  position: relative;
+  top: 8rem;
+
+
+}

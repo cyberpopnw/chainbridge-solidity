@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { DepositsLog } from '@/page/log/type'
+import type { DepositsLog } from '@/page/history/type'
 
 const request = axios.create({
   baseURL: 'http://13.215.244.17:8090'

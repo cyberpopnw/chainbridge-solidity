@@ -10,5 +10,12 @@ html, body {
   height: 100vh;
   font-size: 62.5% !important;
   margin: 0;
-  background-image: linear-gradient(to left, #290348, #0F011B);
+  background: linear-gradient(90deg,#000000 0%,#000000 20%,rgba(0,0,0,.9) 26%,rgba(23,10,71,.96) 50%,rgba(10,8,15,.9) 65%,rgba(40,33,65,.9) 78%,#000000 100%);
+}
+
+.page-primary-title {
+  font-size: 5rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: $color-primary;
 }

@@ -1,44 +1,33 @@
-import Nav from '@/page/home/component/nav'
-import Content from '@/page/home/layout/content'
-
-import { FlexBetween } from '@/layout/flex'
-import { BackgroundImg } from '@/page/home/layout/background'
-import { PrimaryTitle, SecondaryTitle } from '@/layout/title'
-import { TitleWrapper } from '@/page/home/layout/titleWrapper'
-
-import { Statistic, StatisticGroup } from '@/page/home/component/statistic'
+import Nav from '@/component/Nav'
 
 import TransparentTitle from '@/assets/images/transparent-title.webp'
 
+import '@/page/home/index.scss'
+import '@/scss/flex.scss'
 
 import type { FC } from 'react'
+import { Main } from '@/layout/main'
+import Content from '@/layout/Content'
+import { Spacer } from '@/component/Spacer'
 
 const Home: FC = () => {
   return (
-    <>
-      <BackgroundImg />
-      <Nav />
+    <Main className="home">
       <Content>
-        {/*Title*/}
-        <TitleWrapper>
-          <img src={TransparentTitle} alt="NFT Bank: Secured Lending Platform" className="transparent-title" />
-          <PrimaryTitle className="primary-title">
+        <Nav noPadding staticLogo menuPosition="center"/>
+        <Spacer size="xl" />
+        <div className="d-flex align-center flex-column">
+          <img src={TransparentTitle} alt="NFT Bank: Secured Lending Platform" className="transparent-title"/>
+          <h1 className="primary-title">
             NTF Bank: Secured Lending Platform
-          </PrimaryTitle>
-          <SecondaryTitle className="secondary-title">
+          </h1>
+          <h2 className="secondary-title">
             Make your NFT assets flow efficiently
-          </SecondaryTitle>
-        </TitleWrapper>
-        {/* Data */}
-        <StatisticGroup>
-          <Statistic title="Current pool" value="$3213" />
-          <Statistic title="APY" value="62%" />
-          <Statistic title="NFTs" value="11231423" />
-        </StatisticGroup>
-        <FlexBetween>
-        </FlexBetween>
+          </h2>
+        </div>
       </Content>
-    </>
+
+    </Main>
   )
 }
 

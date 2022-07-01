@@ -84,5 +84,7 @@ export const getChain = (value?: unknown, key?: keyof Chain) => {
   return result
 }
 
+export const isSupportChain = (chainId?: Chain['chainId']) => getChain(chainId) != null
+
 
 export default chainIds

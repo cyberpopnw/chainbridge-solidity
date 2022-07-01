@@ -1,4 +1,7 @@
 import { Form, Message, Steps } from '@arco-design/web-react'
+import { Main } from '@/layout/main'
+import Content from '@/layout/Content'
+import Nav from '@/component/Nav'
 import SelectNFT from '@/page/bridge/SelectNFT'
 import TransferTo from '@/page/bridge/TransferTo'
 import ProgressModal from '@/component/ProgressModal'
@@ -98,63 +101,66 @@ const Bridge = () => {
 
 
   return (
-    <>
-      <div className="text-center">
-        <h1 className="page-primary-title">Cross Chain NFT Bridge</h1>
-      </div>
-      <Form.Provider
-        onFormSubmit={(formId, __, { forms, }) => {
-          if (!data?.length) {
-            Message.error('No NFT available')
-            return
-          }
-          if (formId === 'transferTo') {
-            return Promise.all([
-              forms['selectNFT']?.validate(),
-              forms['transferTo']?.validate()
-            ]).then(() => {
-              const value = {
-                ...forms['selectNFT']?.getFieldsValue(),
-                ...forms['transferTo']?.getFieldsValue()
-              } as SelectNFTFormValues & TransferToFormValues
-
-              const selectedNFT = data[value.selectedNFTIndex]
-
-              return deposit({
-                targetChain: getChain(value.targetChain)?.bridgeId as number,
-                targetAddress: value.targetAddress,
-                standard: selectedNFT.standard,
-                id: selectedNFT.id,
-                amount: value.amount
-              })
-            }).catch(() => {
-              Message.error('Field validation exception')
-            })
-          }
-        }}
-      >
-        <Steps className="step__wrapper" current={currentStep} direction="vertical" lineless>
-          <Step
-            title={stepTitle[1].title}
-            description={(
-              <StepContent>
-                <SelectNFT switchStep={switchStep(2)} data={data} loading={requestDataLoading}/>
-              </StepContent>
-            )}
-          />
-          <Step
-            title={stepTitle[2].title}
-            description={
-              <StepContent
-                disabled={currentStep !== 2 && !completedSteps.includes(2)}
-                disabledText={stepTitle[2].disabledText}
-              >
-                <TransferTo loading={depositLoading}/>
-              </StepContent>
+    <Main>
+      <Nav />
+      <Content>
+        <div className="text-center">
+          <h1 className="page-primary-title">Cross Chain NFT Bridge</h1>
+        </div>
+        <Form.Provider
+          onFormSubmit={(formId, __, { forms, }) => {
+            if (!data?.length) {
+              Message.error('No NFT available')
+              return
             }
-          />
-        </Steps>
-      </Form.Provider>
+            if (formId === 'transferTo') {
+              return Promise.all([
+                forms['selectNFT']?.validate(),
+                forms['transferTo']?.validate()
+              ]).then(() => {
+                const value = {
+                  ...forms['selectNFT']?.getFieldsValue(),
+                  ...forms['transferTo']?.getFieldsValue()
+                } as SelectNFTFormValues & TransferToFormValues
+
+                const selectedNFT = data[value.selectedNFTIndex]
+
+                return deposit({
+                  targetChain: getChain(value.targetChain)?.bridgeId as number,
+                  targetAddress: value.targetAddress,
+                  standard: selectedNFT.standard,
+                  id: selectedNFT.id,
+                  amount: value.amount
+                })
+              }).catch(() => {
+                Message.error('Field validation exception')
+              })
+            }
+          }}
+        >
+          <Steps className="step__wrapper" current={currentStep} direction="vertical" lineless>
+            <Step
+              title={stepTitle[1].title}
+              description={(
+                <StepContent>
+                  <SelectNFT switchStep={switchStep(2)} data={data} loading={requestDataLoading}/>
+                </StepContent>
+              )}
+            />
+            <Step
+              title={stepTitle[2].title}
+              description={
+                <StepContent
+                  disabled={currentStep !== 2 && !completedSteps.includes(2)}
+                  disabledText={stepTitle[2].disabledText}
+                >
+                  <TransferTo loading={depositLoading}/>
+                </StepContent>
+              }
+            />
+          </Steps>
+        </Form.Provider>
+      </Content>
       <ProgressModal
         loading={depositLoading}
         result={{
@@ -164,7 +170,7 @@ const Bridge = () => {
         visible={progressModalVisible}
         onCancel={() => setProgressModalVisible(false)}
       />
-    </>
+    </Main>
   )
 }
 
