@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import GlobalStateProvider from '@/globalStateContent'
+import SwitchChainModal from '@/component/SwitchChainModal'
 
 // Arco i18n
 import { ConfigProvider } from '@arco-design/web-react';
@@ -31,6 +32,7 @@ ReactDOM.render(
           <Route path="/connect-wallet" element={<ConnectWallet/>}/>
           <Route path="/no-wallet-detected" element={<NoWalletDetected/>}/>
         </Routes>
+        <SwitchChainModal />
       </GlobalStateProvider>
     </ConfigProvider>
   </BrowserRouter>,
