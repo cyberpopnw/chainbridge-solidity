@@ -16,7 +16,7 @@ const TypographyAddress: FC<Props> = ({ chain, address }) => {
           chain
             ? (
               <Link target="__target" href={`${chain.blockExplorerUrls}/address/${address}`}>
-                {`${address.slice(0, 7)}*****${address.slice(address.length - 4)}`}
+                {`${address.slice(0, 9)}...${address.slice(address.length - 4)}`}
               </Link>
             )
             : address

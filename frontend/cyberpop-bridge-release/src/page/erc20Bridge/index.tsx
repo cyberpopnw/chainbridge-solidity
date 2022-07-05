@@ -100,7 +100,7 @@ const ERC20Bridge = () => {
               <div className="d-flex justify-between align-center">
                 <Typography.Text className="label">Sending Amount</Typography.Text>
                 <Typography.Text className="balance">
-                  MAX：{cytBalance || 0} CYT
+                  Balance：{cytBalance || 0} CYT
                 </Typography.Text>
               </div>
               <Form.Item field="amount" className="m-0" initialValue={cytBalance && 1} rules={[
@@ -124,7 +124,7 @@ const ERC20Bridge = () => {
               </Form.Item>
               <Button type="outline" className="auto-complete" disabled={!cytBalance} onClick={
                 () => formInstance.setFieldValue('amount', cytBalance)
-              }>Max available balance</Button>
+              }>MAX</Button>
             </div>
           </div>
           <div className="divide"/>
