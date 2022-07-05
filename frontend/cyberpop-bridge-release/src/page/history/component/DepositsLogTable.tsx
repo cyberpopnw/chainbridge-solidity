@@ -112,6 +112,7 @@ const DepositsLogTable = () => {
       current: pagination.currentPage,
       pageSize: pagination.pageSize,
       total: data?.total,
+      sizeCanChange: true,
       showTotal: true,
       showJumper: true,
       showMore: true,
