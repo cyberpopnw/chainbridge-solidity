@@ -9,9 +9,8 @@ import ProgressModal from '@/component/ProgressModal'
 import { useState } from 'react'
 import { useRequest } from 'ahooks'
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
-import useCBGDeposit from '@/hooks/useCBGDeposit'
-// import { useCyborgDeposit } from '@/hooks/useCyborgDeposit'
-// import { useBadgeDeposit } from '@/hooks/useBadgeDeposit'
+import { useCyborgDeposit } from '@/hooks/useCyborgDeposit'
+import { useBadgeDeposit } from '@/hooks/useBadgeDeposit'
 
 import { getTokenURIs } from '@/page/bridge/SelectNFT/request'
 import { getChain } from '@/lib/chainIds'
@@ -65,9 +64,8 @@ const Bridge = () => {
   const [completedSteps, setCompletedSteps] = useState([1])
   const [progressModalVisible, setProgressModalVisible] = useState(false)
 
-  // const cyborgDeposit = useCyborgDeposit()
-  // const badgeDeposit = useBadgeDeposit()
-  const cbgDeposit = useCBGDeposit()
+  const cyborgDeposit = useCyborgDeposit()
+  const badgeDeposit = useBadgeDeposit()
 
   const switchStep = (nextStepIndex: number) => () => {
     setCurrentStep(nextStepIndex)
@@ -75,15 +73,21 @@ const Bridge = () => {
   }
 
   const { data, loading: requestDataLoading } = useRequest<NFTItem[], any>(
-    async () => getTokenURIs([contracts?.CBG], selectedAddress || ''),
+    async () => getTokenURIs([contracts?.Cyborg, contracts?.Badge], selectedAddress || ''),
     {
-      refreshDeps: [contracts?.CBG]
+      refreshDeps: [contracts]
     }
   )
 
   const { run: deposit, loading: depositLoading, error } = useRequest<any, [DepositValues]>(value => {
     setProgressModalVisible(true)
-    return cbgDeposit(value.targetChain, value.targetAddress, value.id)
+
+    switch (value.standard) {
+      case 'ERC721':
+        return cyborgDeposit(value.targetChain, value.targetAddress, value.id)
+      case 'ERC1155':
+        return badgeDeposit(value.targetChain, value.targetAddress, value.id, value.amount as number)
+    }
   }, {
     manual: true,
     onSuccess () {

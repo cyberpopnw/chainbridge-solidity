@@ -4,9 +4,9 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { ethers } from "ethers"
 
 import BridgeArtifact from "@/contracts/Bridge.json";
-// import ERC20Artifact from "@/contracts/ERC20.json";
+import ERC20Artifact from "@/contracts/ERC20.json";
 import ERC721Artifact from "@/contracts/Cyborg.json";
-// import ERC1155Artifact from "@/contracts/Badge.json";
+import ERC1155Artifact from "@/contracts/Badge.json";
 
 import type { FC } from 'react'
 import type { GlobalState } from './globalState'
@@ -32,9 +32,19 @@ const GlobalStateProvider: FC = ({ children }) => {
         BridgeArtifact.abi,
         provider.getSigner(0)
       ),
-      CBG: new ethers.Contract(
-        contract.cbg,
+      CYT: new ethers.Contract(
+        contract.cyt,
+        ERC20Artifact.abi,
+        provider.getSigner(0)
+      ),
+      Cyborg: new ethers.Contract(
+        contract.cyborg,
         ERC721Artifact.abi,
+        provider.getSigner(0)
+      ),
+      Badge: new ethers.Contract(
+        contract.badge,
+        ERC1155Artifact.abi,
         provider.getSigner(0)
       )
     })
@@ -92,9 +102,12 @@ const GlobalStateProvider: FC = ({ children }) => {
           let contract
 
           switch (network?.chainId) {
-            case 56:
-              contract = module.bscMainNet
-              break;
+            case 80001:
+              contract = module.mumbai
+              break
+            case 97:
+              contract = module.bscTestNet
+              break
             default:
               contract = module.fujiTestNet
           }

@@ -26,19 +26,18 @@ import Nav from '@/component/Nav'
 
 
 const ERC20Bridge = () => {
-  // @ts-ignore
-  const { cyt, selectedAddress, network } = useGlobalStateContext()
+  const { contracts, selectedAddress, network } = useGlobalStateContext()
   const [progressModalVisible, setProgressModalVisible] = useState(false)
   const [formInstance] = Form.useForm()
 
   const cytDeposit = useCytDeposit()
 
   const { data: cytBalance } = useRequest<number, any[]>(() => (
-      cyt?.balanceOf(selectedAddress).then((res: any) => (
+      contracts?.CYT?.balanceOf(selectedAddress).then((res: any) => (
         BigNumber.from(res).toNumber()
       ))),
     {
-      refreshDeps: [cyt, selectedAddress],
+      refreshDeps: [contracts, selectedAddress],
     }
   )
 

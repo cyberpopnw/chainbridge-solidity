@@ -8,7 +8,6 @@ export type GlobalState = {
   contracts: Partial<{
     Bridge: Contract;
     Badge: Contract;
-    CBG: Contract;
     CYT: Contract;
     Cyborg: Contract;
   }>;

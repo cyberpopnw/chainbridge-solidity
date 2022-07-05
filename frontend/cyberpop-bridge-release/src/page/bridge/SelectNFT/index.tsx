@@ -94,7 +94,7 @@ const SelectNFT: FC<Props> = ({ switchStep, data, loading }) => {
               ? (
                 <>
                   <h3 className="nft-select__title">
-                    {data?.length ? 'Select NFT' : 'No NFT available'}
+                    Select NFT
                   </h3>
                   <Form.Item noStyle field="selectedNFTIndex" rules={selectNFTFormRules.selectedNFTIndex}>
                     <Radio.Group className="nft-radio-card__wrapper">

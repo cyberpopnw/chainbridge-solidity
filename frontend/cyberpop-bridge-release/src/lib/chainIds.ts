@@ -27,10 +27,10 @@ const chainIds: Record<string, Chain> = {
     rpcUrls: ['https://rpc-mumbai.maticvigil.com', 'https://matic-mumbai.chainstacklabs.com'],
     blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
     logo: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=022",
-    enable: false,
+    enable: true,
     color: '#7D4CE0'
   },
-  "fuji": {
+  "fujiTestNet": {
     chainName: "Avalanche Fuji Testnet",
     chainId: 43113,
     bridgeId: 1,
@@ -62,7 +62,7 @@ const chainIds: Record<string, Chain> = {
     ],
     blockExplorerUrls: ['https://testnet.bscscan.com/'],
     logo: 'https://d2cimmz3cflrbm.cloudfront.net/nwhome/BSC.ico',
-    enable: false,
+    enable: true,
     color: '#E7BB40'
   },
   "bscMainNet": {
@@ -77,7 +77,7 @@ const chainIds: Record<string, Chain> = {
     rpcUrls: ['https://bsc-dataseed1.defibit.io'],
     blockExplorerUrls: ['https://bscscan.com/'],
     logo: 'https://d2cimmz3cflrbm.cloudfront.net/nwhome/BSC.ico',
-    enable: true,
+    enable: false,
     color: '#E7BB40'
   },
 }
