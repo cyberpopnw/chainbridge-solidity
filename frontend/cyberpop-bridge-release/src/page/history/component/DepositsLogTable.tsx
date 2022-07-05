@@ -1,4 +1,5 @@
-import { Table, Tooltip, Typography, Tag } from '@arco-design/web-react'
+import { Table, Tag } from '@arco-design/web-react'
+import TypographyAddress from '@/page/history/component/TypographyAddress'
 import ChainTag from '@/component/ChainTag'
 
 import { useState } from 'react'
@@ -49,7 +50,7 @@ const DepositsLogTable = () => {
 
         return (
           <ChainTag color={chain?.color}>
-            { chain?.chainName }
+            {chain?.chainName}
           </ChainTag>
         )
       }
@@ -62,7 +63,7 @@ const DepositsLogTable = () => {
 
         return (
           <ChainTag color={chain?.color}>
-            { chain?.chainName }
+            {chain?.chainName}
           </ChainTag>
         )
       }
@@ -70,20 +71,17 @@ const DepositsLogTable = () => {
     {
       title: 'Sender',
       dataIndex: 'Sender',
-      render: (_, { Sender }) => (
-        <Tooltip content={Sender}>
-          <Typography.Text ellipsis copyable className="m-0">{Sender}</Typography.Text>
-        </Tooltip>
-      )
+      render: (_, { Source, Sender }) => <TypographyAddress address={Sender} chain={getChain(Source, 'bridgeId')} />
     },
     {
       title: 'Operation',
       width: '100px',
+      align: 'center',
       render: (_, { Sender }) => {
         const isOUT = Sender === selectedAddress
         return (
           <Tag color={isOUT ? '#C5EEE9' : '#F8EBCF'} size="small">
-            <span style={{ color: isOUT ? '#02977e' : '#b47d00', fontWeight: 'bold' }}>{ isOUT ? 'OUT' : 'IN' }</span>
+            <span style={{ color: isOUT ? '#02977e' : '#b47d00', fontWeight: 'bold' }}>{isOUT ? 'OUT' : 'IN'}</span>
           </Tag>
         )
       }
@@ -91,11 +89,7 @@ const DepositsLogTable = () => {
     {
       title: 'Recipient',
       dataIndex: 'Recipient',
-      render: (_, { Recipient }) => (
-        <Tooltip content={Recipient}>
-          <Typography.Text ellipsis copyable className="m-0">{Recipient}</Typography.Text>
-        </Tooltip>
-      )
+      render: (_, { Destination, Recipient }) => <TypographyAddress address={Recipient} chain={getChain(Destination, 'bridgeId')} />
     },
     {
       title: "Token ID",
