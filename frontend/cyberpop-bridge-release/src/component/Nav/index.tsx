@@ -15,7 +15,7 @@ import type { FC } from 'react'
 type Props = {
   noPadding?: boolean,
   staticLogo?: boolean,
-  menuPosition?: 'center' | 'left',
+  menuPosition?: 'center' | 'left'
 }
 
 const Nav: FC<Props> = ({ noPadding = false, staticLogo = false, menuPosition = 'left' }) => {

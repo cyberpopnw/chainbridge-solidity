@@ -1,5 +1,5 @@
-import { Button, Form, Input, Spin, Message, Grid, Radio, Typography } from '@arco-design/web-react'
-import ChainSelect from '@/component/chooseAddressForm/chainSelect'
+import { Button, Form, Input, Spin, Message, Grid, Radio, Typography, Empty } from '@arco-design/web-react'
+import ChainSelect from '@/page/bridge/SelectNFT/component/ChainSelect'
 import NFTCard from '@/page/bridge/SelectNFT/component/NFTCard'
 
 import { useState } from 'react'
@@ -9,7 +9,6 @@ import { getChain } from '@/lib/chainIds'
 import { switchChain } from '@/lib/metamask'
 import selectNFTFormRules from '@/page/bridge/SelectNFT/formRules'
 
-import '@/component/chooseAddressForm/index.scss'
 import '@/page/bridge/index.scss'
 import '@/scss/flex.scss'
 
@@ -90,25 +89,32 @@ const SelectNFT: FC<Props> = ({ switchStep, data, loading }) => {
       </div>
       <div className="nft-select__wrapper">
         <Spin loading={loading} size={40}>
-          <h3 className="nft-select__title">
-            {data?.length ? 'Select NFT' : 'No NFT available'}
-          </h3>
-          <Form.Item noStyle field="selectedNFTIndex" rules={selectNFTFormRules.selectedNFTIndex}>
-            <Radio.Group className="nft-radio-card__wrapper">
-              <Grid.Row gutter={[50, 30]} align="center">
-                {
-                  data?.map((NFTItem, index) => (
-                    NFTItem && (
-                      <Grid.Col span={8} key={NFTItem?.standard + NFTItem?.id}>
-                        <NFTCard index={index} NFTItem={NFTItem} formInstance={formInstance}/>
-                      </Grid.Col>
-                    )
-                  ))
-                }
-              </Grid.Row>
-            </Radio.Group>
-
-          </Form.Item>
+          {
+            data && data.length > 0
+              ? (
+                <>
+                  <h3 className="nft-select__title">
+                    {data?.length ? 'Select NFT' : 'No NFT available'}
+                  </h3>
+                  <Form.Item noStyle field="selectedNFTIndex" rules={selectNFTFormRules.selectedNFTIndex}>
+                    <Radio.Group className="nft-radio-card__wrapper">
+                      <Grid.Row gutter={[50, 30]} align="center">
+                        {
+                          data?.map((NFTItem, index) => (
+                            NFTItem && (
+                              <Grid.Col span={8} key={NFTItem?.standard + NFTItem?.id}>
+                                <NFTCard index={index} NFTItem={NFTItem} formInstance={formInstance}/>
+                              </Grid.Col>
+                            )
+                          ))
+                        }
+                      </Grid.Row>
+                    </Radio.Group>
+                  </Form.Item>
+                </>
+              )
+            : <Empty />
+          }
         </Spin>
       </div>
       <div className="flex-center">

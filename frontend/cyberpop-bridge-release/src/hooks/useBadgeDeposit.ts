@@ -3,18 +3,18 @@ import { utils, BigNumber } from 'ethers'
 import waitForTransaction from '@/utils/waitForTransaction'
 
 export const useBadgeDeposit = () => {
-  const { badge, bridge, selectedAddress } = useGlobalStateContext()
+  const { contracts, selectedAddress } = useGlobalStateContext()
 
   return async (chainId: number | undefined, to: string, tokenId: unknown, amount: number) => {
     if (chainId == null) {
       return Promise.reject({ message: 'Chain ID is required.' })
     }
 
-    const handler = await bridge?._resourceIDToHandlerAddress(process.env.REACT_APP_BadgeResourceID)
+    const handler = await contracts?.Bridge?._resourceIDToHandlerAddress(process.env.REACT_APP_BadgeResourceID)
 
-    const isApproved = await badge?.isApprovedForAll(selectedAddress, handler)
+    const isApproved = await contracts?.Bridge?.isApprovedForAll(selectedAddress, handler)
     if (!isApproved) {
-      await waitForTransaction(await badge?.setApprovalForAll(handler, true))
+      await waitForTransaction(await contracts?.Bridge?.setApprovalForAll(handler, true))
     }
 
     const data = '0x' +
@@ -24,7 +24,7 @@ export const useBadgeDeposit = () => {
       to.substring(2);
 
     return waitForTransaction(
-      await bridge?.deposit(chainId, process.env.REACT_APP_BadgeResourceID, data)
+      await contracts?.Bridge?.deposit(chainId, process.env.REACT_APP_BadgeResourceID, data)
     )
   }
 }

@@ -1,13 +1,18 @@
 import { providers, Contract } from 'ethers'
 import type { Network } from '@/contract-address'
 
+// type contract = 'CYT' | 'Cyborg' | 'Badge' | 'CBG' | 'Bridge'
+
 export type GlobalState = {
   provider: providers.Web3Provider;
-  badge: Contract;
-  bridge: Contract;
-  cyt: Contract;
-  cyborg: Contract;
-  contractAddress: Promise<Network | undefined>,
+  contracts: Partial<{
+    Bridge: Contract;
+    Badge: Contract;
+    CBG: Contract;
+    CYT: Contract;
+    Cyborg: Contract;
+  }>;
+  contractAddress: Promise<Network | undefined>;
   network?: providers.Network;
   selectedAddress: string | null;
   connectWallet: () => Promise<void>

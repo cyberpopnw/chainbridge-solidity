@@ -3,11 +3,11 @@ import DepositsLogTable from '@/page/history/component/DepositsLogTable'
 import Nav from '@/component/Nav'
 import Content from '@/layout/Content'
 
-const LogPage = () => {
+const HistoryPage = () => {
   return (
     <Main>
       <Nav/>
-      <Content>
+      <Content justifyCenter alignCenter>
         <div className="text-center">
           <h1 className="page-primary-title">
             Deposits History
@@ -19,4 +19,4 @@ const LogPage = () => {
   )
 }
 
-export default LogPage
+export default HistoryPage

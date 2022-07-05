@@ -1,6 +1,6 @@
 import { Message, Form, Typography, InputNumber, Input, Button, Space, Divider } from '@arco-design/web-react'
 import { FaArrowCircleDown, FaWallet } from 'react-icons/fa'
-import ChainSelect from '@/component/chooseAddressForm/chainSelect'
+import ChainSelect from '@/page/bridge/SelectNFT/component/ChainSelect'
 import ProgressModal from '@/component/ProgressModal'
 
 import { useState } from 'react'
@@ -26,6 +26,7 @@ import Nav from '@/component/Nav'
 
 
 const ERC20Bridge = () => {
+  // @ts-ignore
   const { cyt, selectedAddress, network } = useGlobalStateContext()
   const [progressModalVisible, setProgressModalVisible] = useState(false)
   const [formInstance] = Form.useForm()
@@ -80,8 +81,8 @@ const ERC20Bridge = () => {
 
   return (
     <Main>
-      <Nav />
-      <Content>
+      <Nav/>
+      <Content justifyCenter alignCenter>
         <div className="text-center">
           <h1 className="page-primary-title">
             Cross Chain ERC-20 Token

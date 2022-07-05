@@ -12,11 +12,13 @@ const ChainButtonGroup = () => (
   <div className="d-flex justify-center align-center flex-column">
     <Space direction="vertical">
       {
-        Object.values(chainIds).map(chain => (
-          <Button long size="large" onClick={() => switchChain(chain.chainId)}>
-            { chain.chainName }
-          </Button>
-        ))
+        Object.values(chainIds)
+          .filter(chain => chain.enable)
+          .map(chain => (
+            <Button long size="large" onClick={() => switchChain(chain.chainId)}>
+              {chain.chainName}
+            </Button>
+          ))
       }
     </Space>
   </div>
@@ -27,9 +29,9 @@ const SwitchChainModal = () => {
 
   useEffect(() => {
     if (network && !isSupportChain(network?.chainId)) {
-       Modal.warning({
+      Modal.warning({
         title: <Typography.Text type="warning" bold>Please switch your network.</Typography.Text>,
-        content: <ChainButtonGroup />,
+        content: <ChainButtonGroup/>,
         footer: null
       })
     }

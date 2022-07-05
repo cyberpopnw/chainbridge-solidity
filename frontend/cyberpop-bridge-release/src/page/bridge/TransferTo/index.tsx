@@ -1,12 +1,11 @@
 import { Button, Form, Input, Message, Typography } from '@arco-design/web-react'
-import ChainSelect from '@/component/chooseAddressForm/chainSelect'
+import ChainSelect from '@/page/bridge/SelectNFT/component/ChainSelect'
 
 import { useState } from 'react'
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 
 import formRules from '@/page/bridge/TransferTo/formRules'
 
-import '@/component/chooseAddressForm/index.scss'
 import '@/page/bridge/index.scss'
 import '@/scss/flex.scss'
 

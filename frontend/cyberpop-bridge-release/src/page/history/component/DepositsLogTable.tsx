@@ -1,16 +1,21 @@
 import { Table, Tooltip, Typography, Tag } from '@arco-design/web-react'
+import ChainTag from '@/component/ChainTag'
 
 import { useState } from 'react'
 import { useRequest } from 'ahooks'
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
 
-import { getDepositLog } from '@/page/history/request'
+import { getChain } from '@/lib/chainIds'
+import { getDepositHistory } from '@/page/history/request'
 
 import type { TableProps, TableColumnProps } from '@arco-design/web-react'
-import type { DepositsLog } from '@/page/history/type'
+import type { DepositsHistory } from '@/page/history/type'
 import type { Pagination } from '@/types/Pagination'
-import { getChain } from '@/lib/chainIds'
-import ChainTag from '@/component/ChainTag'
+
+type DepositsHistoryData = {
+  list?: DepositsHistory[];
+  total?: number;
+}
 
 const DepositsLogTable = () => {
   const { selectedAddress } = useGlobalStateContext()
@@ -18,16 +23,19 @@ const DepositsLogTable = () => {
     currentPage: 1, pageSize: 10
   })
 
-  const { data, loading } = useRequest<DepositsLog[], []>(
-    () => getDepositLog().then(({ data: response }) => (
-      response?.filter(item => item.Sender === selectedAddress || item.Recipient === selectedAddress)
-    )),
+  const { data, loading } = useRequest<DepositsHistoryData, []>(
+    () => getDepositHistory().then(data => ({
+      list: data
+        // ?.filter(record => record.Sender === selectedAddress || record.Recipient === selectedAddress)
+        ?.slice((pagination.currentPage - 1) * pagination.pageSize, pagination.currentPage * pagination.pageSize),
+      total: data?.length
+    })),
     {
       refreshDeps: [pagination, selectedAddress]
     }
   )
 
-  const columns: TableColumnProps<DepositsLog>[] = [
+  const columns: TableColumnProps<DepositsHistory>[] = [
     {
       title: 'No',
       width: '70px',
@@ -36,16 +44,28 @@ const DepositsLogTable = () => {
     {
       title: 'Source Chain',
       dataIndex: 'Source',
-      render: (_, { Source }) => (
-        <ChainTag chainName={getChain(Source, 'bridgeId')?.chainName} />
-      )
+      render: (_, { Source }) => {
+        const chain = getChain(Source, 'bridgeId')
+
+        return (
+          <ChainTag color={chain?.color}>
+            { chain?.chainName }
+          </ChainTag>
+        )
+      }
     },
     {
       title: 'Destination Chain',
       dataIndex: 'Destination',
-      render: (_, { Destination }) => (
-        <ChainTag chainName={getChain(Destination, 'bridgeId')?.chainName} />
-      )
+      render: (_, { Destination }) => {
+        const chain = getChain(Destination, 'bridgeId')
+
+        return (
+          <ChainTag color={chain?.color}>
+            { chain?.chainName }
+          </ChainTag>
+        )
+      }
     },
     {
       title: 'Sender',
@@ -60,10 +80,10 @@ const DepositsLogTable = () => {
       title: 'Operation',
       width: '100px',
       render: (_, { Sender }) => {
-        const OUT = Sender === selectedAddress
+        const isOUT = Sender === selectedAddress
         return (
-          <Tag color={OUT ? '#C5EEE9' : '#F8EBCF'} size="small">
-            <span style={{ color: OUT ? '#02977e' : '#b47d00', fontWeight: 'bold' }}>{ OUT ? 'OUT' : 'IN' }</span>
+          <Tag color={isOUT ? '#C5EEE9' : '#F8EBCF'} size="small">
+            <span style={{ color: isOUT ? '#02977e' : '#b47d00', fontWeight: 'bold' }}>{ isOUT ? 'OUT' : 'IN' }</span>
           </Tag>
         )
       }
@@ -89,15 +109,15 @@ const DepositsLogTable = () => {
 
   const tableProps: TableProps = {
     loading,
-    data,
     columns,
+    data: data?.list,
     border: true,
-    scroll: { x: 800 },
+    scroll: { x: '100%' },
     rowKey: record => record.DataHash,
     pagination: {
       current: pagination.currentPage,
       pageSize: pagination.pageSize,
-      total: data?.length,
+      total: data?.total,
       showTotal: true,
       showJumper: true,
       showMore: true,

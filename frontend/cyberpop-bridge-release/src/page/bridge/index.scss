@@ -1,5 +1,4 @@
 @import 'src/scss/color';
-@import 'src/component/chooseAddressForm';
 @import 'src/page/bridge/selectNFT';
 
 .step__wrapper {
@@ -25,10 +24,6 @@
   padding: 5rem 5rem;
   width: 115rem;
   margin-bottom: 2rem;
-
-  .arco-spin {
-    display: block;
-  }
 
   &--disabled {
     .step__item__title, .step__item__text {

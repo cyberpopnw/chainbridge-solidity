@@ -1,8 +1,9 @@
 import axios from 'axios'
-import type { DepositsLog } from '@/page/history/type'
+import type { DepositsHistory } from '@/page/history/type'
 
 const request = axios.create({
-  baseURL: 'http://13.215.244.17:8090'
+  baseURL: 'https://apibridge.cyberpop.online'
 })
 
-export const getDepositLog = () => request.get<DepositsLog[]>('/deposits')
+export const getDepositHistory = () => request.get<DepositsHistory[]>('/deposits')
+  .then(({ data }) => Array.isArray(data) ? data : undefined)

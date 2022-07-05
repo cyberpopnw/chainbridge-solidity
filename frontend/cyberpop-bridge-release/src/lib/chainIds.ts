@@ -10,6 +10,8 @@ export type Chain = {
   rpcUrls: string[];
   blockExplorerUrls: string[]
   logo: string;
+  enable: boolean;
+  color: string;
 }
 
 const chainIds: Record<string, Chain> = {
@@ -25,6 +27,8 @@ const chainIds: Record<string, Chain> = {
     rpcUrls: ['https://rpc-mumbai.maticvigil.com', 'https://matic-mumbai.chainstacklabs.com'],
     blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
     logo: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=022",
+    enable: false,
+    color: '#7D4CE0'
   },
   "fuji": {
     chainName: "Avalanche Fuji Testnet",
@@ -38,20 +42,9 @@ const chainIds: Record<string, Chain> = {
     rpcUrls: ["https://api.avax-test.network/ext/bc/C/rpc"],
     blockExplorerUrls: ["https://testnet.snowtrace.io"],
     logo: "https://nftrade.com/img/chains/icons/avax.png",
+    enable: true,
+    color: '#E74045'
   },
-  // "bsc": {
-  //   chainName: 'Binance Smart Chain',
-  //   chainId: 56,
-  //   bridgeId: 2,
-  //   nativeCurrency: {
-  //     name: 'BNB',
-  //     symbol: 'BNB',
-  //     decimals: 18
-  //   },
-  //   rpcUrls: ['https://bsc-dataseed1.defibit.io'],
-  //   blockExplorerUrls: ['https://bscscan.com/'],
-  //   logo: 'https://d2cimmz3cflrbm.cloudfront.net/nwhome/BSC.ico'
-  // },
   "bscTestNet": {
     chainName: 'Binance Smart Chain TestNet',
     chainId: 97,
@@ -68,8 +61,25 @@ const chainIds: Record<string, Chain> = {
       'https://data-seed-prebsc-2-s3.binance.org:8545'
     ],
     blockExplorerUrls: ['https://testnet.bscscan.com/'],
-    logo: 'https://d2cimmz3cflrbm.cloudfront.net/nwhome/BSC.ico'
-  }
+    logo: 'https://d2cimmz3cflrbm.cloudfront.net/nwhome/BSC.ico',
+    enable: false,
+    color: '#E7BB40'
+  },
+  "bscMainNet": {
+    chainName: 'Binance Smart Chain',
+    chainId: 56,
+    bridgeId: 3,
+    nativeCurrency: {
+      name: 'BNB',
+      symbol: 'BNB',
+      decimals: 18
+    },
+    rpcUrls: ['https://bsc-dataseed1.defibit.io'],
+    blockExplorerUrls: ['https://bscscan.com/'],
+    logo: 'https://d2cimmz3cflrbm.cloudfront.net/nwhome/BSC.ico',
+    enable: true,
+    color: '#E7BB40'
+  },
 }
 
 export const getChain = (value?: unknown, key?: keyof Chain) => {

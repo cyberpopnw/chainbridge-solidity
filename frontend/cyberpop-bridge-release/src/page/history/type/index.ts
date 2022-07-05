@@ -1,4 +1,4 @@
-export type DepositsLog = {
+export type DepositsHistory = {
   Source: number;
   Destination: number;
   Sender: string;

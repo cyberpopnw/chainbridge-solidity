@@ -3,16 +3,16 @@ import { utils, BigNumber } from 'ethers'
 import waitForTransaction from '@/utils/waitForTransaction'
 
 export const useCyborgDeposit = () => {
-  const { cyborg, bridge } = useGlobalStateContext()
+  const { contracts } = useGlobalStateContext()
 
   return async (chainId: number | undefined, to: string, tokenId: unknown) => {
     if (chainId == null) {
       return Promise.reject({ message: 'Chain ID is required.' })
     }
 
-    const handler = await bridge?._resourceIDToHandlerAddress(process.env.REACT_APP_CyborgResourceID)
+    const handler = await contracts?.Bridge?._resourceIDToHandlerAddress(process.env.REACT_APP_CyborgResourceID)
 
-    await waitForTransaction(await cyborg?.approve(handler, tokenId))
+    await waitForTransaction(await contracts?.Cyborg?.approve(handler, tokenId))
 
     const data = '0x' +
       utils.hexZeroPad(BigNumber.from(tokenId).toHexString(), 32).substring(2) +
@@ -20,7 +20,7 @@ export const useCyborgDeposit = () => {
       to.substring(2);
 
     return waitForTransaction(
-      await bridge?.deposit(chainId, process.env.REACT_APP_CyborgResourceID, data)
+      await contracts?.Bridge?.deposit(chainId, process.env.REACT_APP_CyborgResourceID, data)
     )
   }
 }

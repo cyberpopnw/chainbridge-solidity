@@ -9,8 +9,9 @@ import ProgressModal from '@/component/ProgressModal'
 import { useState } from 'react'
 import { useRequest } from 'ahooks'
 import { useGlobalStateContext } from '@/hooks/useGlobalStateContext'
-import { useCyborgDeposit } from '@/hooks/useCyborgDeposit'
-import { useBadgeDeposit } from '@/hooks/useBadgeDeposit'
+import useCBGDeposit from '@/hooks/useCBGDeposit'
+// import { useCyborgDeposit } from '@/hooks/useCyborgDeposit'
+// import { useBadgeDeposit } from '@/hooks/useBadgeDeposit'
 
 import { getTokenURIs } from '@/page/bridge/SelectNFT/request'
 import { getChain } from '@/lib/chainIds'
@@ -21,6 +22,7 @@ import type { FormValues as SelectNFTFormValues } from '@/page/bridge/SelectNFT/
 import type { FormValues as TransferToFormValues } from '@/page/bridge/TransferTo/type'
 
 import '@/page/bridge/index.scss'
+
 
 type DepositValues = {
   targetChain: TransferToFormValues['targetChain'],
@@ -58,13 +60,14 @@ const StepContent: FC<{
 }
 
 const Bridge = () => {
-  const { cyborg, badge, selectedAddress } = useGlobalStateContext()
+  const { contracts, selectedAddress } = useGlobalStateContext()
   const [currentStep, setCurrentStep] = useState(1)
   const [completedSteps, setCompletedSteps] = useState([1])
   const [progressModalVisible, setProgressModalVisible] = useState(false)
 
-  const cyborgDeposit = useCyborgDeposit()
-  const badgeDeposit = useBadgeDeposit()
+  // const cyborgDeposit = useCyborgDeposit()
+  // const badgeDeposit = useBadgeDeposit()
+  const cbgDeposit = useCBGDeposit()
 
   const switchStep = (nextStepIndex: number) => () => {
     setCurrentStep(nextStepIndex)
@@ -72,26 +75,18 @@ const Bridge = () => {
   }
 
   const { data, loading: requestDataLoading } = useRequest<NFTItem[], any>(
-    async () => getTokenURIs([cyborg, badge], selectedAddress || ''),
+    async () => getTokenURIs([contracts?.CBG], selectedAddress || ''),
     {
-      refreshDeps: [cyborg, badge]
+      refreshDeps: [contracts?.CBG]
     }
   )
 
   const { run: deposit, loading: depositLoading, error } = useRequest<any, [DepositValues]>(value => {
     setProgressModalVisible(true)
-    switch (value.standard) {
-      case 'ERC721':
-        return cyborgDeposit(value.targetChain, value.targetAddress, value.id)
-      case 'ERC1155':
-        return badgeDeposit(value.targetChain, value.targetAddress, value.id, value.amount as number)
-      default:
-        return Promise.reject('Not found match deposit function.')
-    }
+    return cbgDeposit(value.targetChain, value.targetAddress, value.id)
   }, {
     manual: true,
-    onSuccess (res) {
-      console.log('transaction result -->', res)
+    onSuccess () {
       Message.success('Contract Active')
     },
     onError (e) {
@@ -103,7 +98,7 @@ const Bridge = () => {
   return (
     <Main>
       <Nav />
-      <Content>
+      <Content justifyCenter alignCenter>
         <div className="text-center">
           <h1 className="page-primary-title">Cross Chain NFT Bridge</h1>
         </div>
