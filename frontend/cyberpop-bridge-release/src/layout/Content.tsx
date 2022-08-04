@@ -17,7 +17,9 @@ const Content = styled.div<{
   `};
   
   @media only screen and (min-width: 800px) {
-    padding: 5rem 10rem;
+    padding: 0;
+    max-width: 1100px;
+    margin: 0 auto;
   }
 `
 

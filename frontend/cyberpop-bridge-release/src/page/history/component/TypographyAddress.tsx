@@ -10,8 +10,8 @@ type Props = {
 
 const TypographyAddress: FC<Props> = ({ chain, address }) => {
   return (
-    <Typography.Text className="m-0" bold copyable>
-      <Tooltip position="tl" content={address}>
+    <Typography.Text className="m-0" bold>
+      <Tooltip position="tl" content={<Typography.Text copyable>{ address }</Typography.Text> }>
         {
           chain
             ? (
